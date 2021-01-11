@@ -29,7 +29,7 @@ tournament = smash.tournament_show("smash-summit-10-online")
 print(tournament)
 
 # Show meta information for Smash Summit 10 Online with bracket Id
-tournament_with_brackets = smash.tournament_show_with_brackets("smash-summit-10-online", "smash-summit-10-online")
+tournament_with_brackets = smash.tournament_show_with_brackets("smash-summit-10-online", "melee-singles")
 print(tournament_with_bracket_ids)
 ```
 
@@ -65,8 +65,6 @@ brackets = smash.tournament_show_event_brackets('smash-summit-10', 'melee-single
 print(brackets)
 ```
 
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
-
 ## API Documentation
 
 #### [Intro](https://developer.smash.gg/docs/intro/)
@@ -74,3 +72,5 @@ print(brackets)
 #### [References](https://developer.smash.gg/reference/)
 
 # README IS NOT COMPLETE, STILL TODO
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
