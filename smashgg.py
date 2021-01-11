@@ -16,21 +16,36 @@ class smashgg(object):
   def print_key(self):
     print(self.key)
 
+  def print_header(self):
+    print(self.header)
 
+  # Metadata for a tournament
+  def tournament_show(self, tournament_name):
+    return tournaments.show(tournament_name, self.header)
+
+  # Metadata for a tournament with a bracket
+  def tournament_show_with_brackets(self, tournament_name, event_name):
+    return tournaments.show_with_brackets(tournament_name, event_name, self.header)
+
+  # List of events for a tournament
+  def tournament_show_events(self, tournament_name):
+    return tournaments.show_events(tournament_name, self.header)
+
+  # List of sets for an event -- Probably don't mess with sleep time
+  def tournament_show_sets(self, tournament_name, event_name, sleep_time=15):
+    return tournaments.show_sets(tournament_name, event_name, self.header, sleep_time)
+
+  # List of players for an event -- Probably don't mess with sleep time
+  def tournament_show_players(self, tournament_name, event_name, sleep_time=15):
+    return tournaments.show_players(tournament_name, event_name, self.header, sleep_time)
+
+  def tournament_show_events_brackets(self, tournament_name, event_name):
+    return tournaments.show_events_brackets(tournament_name, event_name, self.header)
 
 def main():
   smash = smashgg("fcfa6bca8386030cc2561368ec22ba89")
-  query = """query GetEventIDs($slug: String) {
-  tournament(slug: $slug) {
-  events {
-    name
-    id
-  }
-  }
-  }"""
-  variables = {"slug": "smash-summit-10-online"}
-
-  print(tournaments.run_query(query, variables, smash.header))
+  response = smash.tournament_show_events_brackets("smash-summit-10-online", "melee-singles")
+  print(json.dumps(response, indent=2))
 
 main()
 
