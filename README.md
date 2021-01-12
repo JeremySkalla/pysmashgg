@@ -10,6 +10,8 @@
 
 - `pip install pysmashgg==0.1.0`
 
+- PyPI Page: [https://pypi.org/project/pysmashgg/](https://pypi.org/project/pysmashgg/)
+
 ## Required packages
 
 - Requests - `pip install requests`
