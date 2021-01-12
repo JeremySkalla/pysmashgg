@@ -91,10 +91,16 @@ smash = pysmashgg.SmashGG('KEY')
 # These bracket IDs are found from the tournament_show_event_brackets command, as well as others
 
 # Shows players in a certain bracket
+# NOTE: sleep_time is the second arg, but don't touch it unless you
+# you know what you're doing (it is there to make sure you don't get code 429)
+# If you do get Status Code 429, change sleep_time to 30 or so for large tournaments
 bracket_players = smash.bracket_show_players(224997)
 print(bracket_players)
 
 # Shows sets from a bracket
+# NOTE: sleep_time is the second arg, but don't touch it unless you
+# you know what you're doing (it is there to make sure you don't get code 429)
+# If you do get Status Code 429, change sleep_time to 30 or so for large tournaments
 sets = self.smash.bracket_show_sets(1401911)
 print(sets)
 ```
