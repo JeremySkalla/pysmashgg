@@ -28,7 +28,7 @@ However, I would like to say I think the best thing to do with this project if y
 
 ## Metadata Usage
 
-```
+```python
 import SmashGGPy
 
 # Initialize the SmashGGPy class
@@ -51,7 +51,7 @@ print(tournament_with_all_brackets)
 
 ## Convenience Usage
 
-```
+```python
 import SmashGGPy
 # Initialize the SmashGGPy class
 smash = pysmashgg.SmashGG('KEY')
@@ -94,7 +94,7 @@ print(player_head_to_head)
 
 ## Bracket Usage
 
-```
+```python
 import SmashGGPy
 # Initialize the SmashGGPy class
 smash = pysmashgg.SmashGG('KEY')
