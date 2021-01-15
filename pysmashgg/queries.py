@@ -1,38 +1,49 @@
-def player_id_query():
-  query = """query EventEntrants($eventId: ID!, $page: Int!) {
-  event(id: $eventId) {
+PLAYER_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
+    event(id: $eventId) {
     entrants(query: {
-      page: $page
+      page: 1
       perPage: 32
+      filter: {name: $name}
     }) {
       nodes {
         participants {
           gamerTag
           player {
-            id
+            id 
           }
         }
       }
     }
-  }
-  } """
-  
-  return query
+    }
+    }"""
 
-def event_id_query():
-  query = """query ($tourneySlug: String!) {
+ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
+    event(id: $eventId) {
+    entrants(query: {
+      page: 1
+      perPage: 32
+      filter: {
+        name: $name
+      }
+    }) {
+      nodes {
+        id
+        name
+      }
+    }
+    }
+    }"""
+
+EVENT_ID_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     events {
       id
       slug
     }
   }
-  } """
-  
-  return query
+}"""
 
-def metadata_query():
-  query = """query ($tourneySlug: String!) {
+SHOW_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     id
     venueName
@@ -48,12 +59,10 @@ def metadata_query():
     endAt
     numAttendees
   }
-  } """
+}"""
 
-  return query
 
-def metadata_with_brackets_query():
-  query = """query ($tourneySlug: String!) {
+SHOW_WITH_BRACKETS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     id
     venueName
@@ -74,12 +83,9 @@ def metadata_with_brackets_query():
       slug
     }
   }
-  } """
-  
-  return query
+}"""
 
-def events_query():
-  query = """query ($tourneySlug: String!) {
+SHOW_EVENTS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     events {
       id
@@ -87,14 +93,11 @@ def events_query():
       slug
     }
   }
-  } """
-  
-  return query
+}"""
 
-def show_sets_query():
-  query = """query EventSets($eventId: ID!, $page: Int!) {
+SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
   event(id: $eventId) {
-    sets(page: $page, perPage: 32) {
+    sets(page: $page, perPage: 25) {
       nodes {
         id
         slots {
@@ -110,6 +113,12 @@ def show_sets_query():
           entrant {
             id
             name
+            participants {
+              player {
+                id
+                gamerTag
+              }
+            }
           }
         }
         phaseGroup {
@@ -121,17 +130,15 @@ def show_sets_query():
       }
     }
   }
-  }"""
-  
-  return query
+}"""
 
-def show_players_query():
-  query = """query EventStandings($eventId: ID!, $page: Int!) {
+
+SHOW_ENTRANTS_QUERY = """query EventStandings($eventId: ID!, $page: Int!) {
   event(id: $eventId) {
     id
     name
     standings(query: {
-      perPage: 32,
+      perPage: 25,
       page: $page}){
       nodes {
         placement
@@ -139,15 +146,9 @@ def show_players_query():
           id
           name
           participants {
-            user {
-              name
-              location {
-                state
-                country
-              }
-              player {
-                id
-              }
+            player {
+              id
+              gamerTag
             }
           }
           seeds {
@@ -157,12 +158,9 @@ def show_players_query():
       }
     }
   }
-  }"""
-  
-  return query
+}"""
 
-def show_events_brackets_query():
-  query = """query ($tourneySlug: String!) {
+SHOW_EVENTS_BRACKETS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     events {
       name
@@ -172,18 +170,15 @@ def show_events_brackets_query():
       }
     }
   }
-  }"""
-  
-  return query
+}"""
 
-def show_player_sets_query():
-  query = """query EventSets($eventId: ID!, $playerId: ID!, $page: Int!) {
+SHOW_ENTRANT_SETS_QUERY = """query EventSets($eventId: ID!, $entrantId: ID!, $page: Int!) {
   event(id: $eventId) {
     sets(
       page: $page
       perPage: 16
       filters: {
-        playerIds: [$playerId]
+        entrantIds: [$entrantId]
       }
     ) {
       nodes {
@@ -201,18 +196,6 @@ def show_player_sets_query():
           entrant {
             id
             name
-            participants {
-              user {
-                name 
-                location {
-                  state
-                  country
-                }
-      					player {
-                  id
-                }
-              }
-            }
           }
         }
         phaseGroup {
@@ -221,61 +204,9 @@ def show_player_sets_query():
       }
     }
   }
-  } """
-  
-  return query
+}"""
 
-def show_head_to_head_query():
-  query = """query EventSets($eventId: ID!, $playerId: ID!, $page: Int!) {
-  event(id: $eventId) {
-    sets(
-      page: $page
-      perPage: 16
-      filters: {
-        playerIds: [$playerId]
-      }
-    ) {
-      nodes {
-        id
-        fullRoundText
-        slots {
-          standing {
-            placement
-            stats {
-              score {
-                value
-              }
-            }
-          }
-          entrant {
-            id
-            name
-            participants {
-              user {
-                name 
-                location {
-                  state
-                  country
-                }
-      					player {
-                  id
-                }
-              }
-            }
-          }
-        }
-        phaseGroup {
-          id
-        }
-      }
-    }
-  }
-  } """
-  
-  return query
-
-def bracket_show_players_query():
-  query = """query ($phaseGroupId: ID!, $page: Int!) {
+BRACKET_SHOW_ENTRANTS_QUERY = """query ($phaseGroupId: ID!, $page: Int!) {
   phaseGroup(id: $phaseGroupId) {
     id
     seeds (query: {page: $page, perPage: 32}) {
@@ -285,26 +216,19 @@ def bracket_show_players_query():
         entrant {
           id
           name
-        }
-        players {
-          id
-          user {
-            name
-            location {
-              state
-              country
+          participants {
+            player {
+              id
+              gamerTag
             }
           }
         }
       }
     }
   }
-  }"""
+}"""
 
-  return query
-
-def bracket_show_sets_query():
-  query = """query PhaseGroupSets($phaseGroupId: ID!, $page:Int!){
+BRACKET_SHOW_SETS_QUERY = """query PhaseGroupSets($phaseGroupId: ID!, $page:Int!){
   phaseGroup(id:$phaseGroupId){
     phase {
       name
@@ -319,6 +243,12 @@ def bracket_show_sets_query():
           entrant{
             id
             name
+            participants {
+              player {
+                id
+                gamerTag
+              }
+            }
           }
           standing {
             placement
@@ -332,6 +262,4 @@ def bracket_show_sets_query():
       }
     }
   }
-  } """
-  
-  return query
+}"""
