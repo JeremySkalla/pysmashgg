@@ -8,7 +8,7 @@
 
 #### SmashGGPy is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
 
-#### Currently in Beta -- v0.2.1 right now! Will be adding features that weren't in PySmash (the inspiration, as stated above) -- See CHANGELOG.md for the most recent changes
+#### Currently in Beta -- v0.3.0 right now! Will be adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!) -- See CHANGELOG.md for the most recent changes
 
 ## How to install current version
 
@@ -63,18 +63,20 @@ events = smash.tournament_show_events('smash-summit-10-online')
 print(events)
 
 # Shows a complete list of sets given tournament and event names
-# NOTE: sleep_time is the third arg, but don't touch it unless you
-# you know what you're doing (it is there to make sure you don't get Status Code 429)
-# If you do get Status Code 429, change sleep_time to 30 or so for large tournaments
-sets = smash.tournament_show_sets('smash-summit-10-online', 'melee-singles')
-print(sets) # note: result might be VERY large for larger tournaments.
+# NOTE: page_num is the third arg, allowing you to do your own pagination.
+# The result is returned as an array of dictionaries, which individually are sets with data
+# I would reccomend iterating through each page until response is None, which means you're out of pages
+# Normally a delay is needed in real time to avoid timing out the API
+sets = smash.tournament_show_sets('smash-summit-10-online', 'melee-singles', 1)
+print(sets)
 
 # Shows a complete list of entrants given tournament and event names
-# NOTE: sleep_time is the third arg, but don't touch it unless you
-# you know what you're doing (it is there to make sure you don't get code 429)
-# If you do get Status Code 429, change sleep_time to 30 or so for large tournaments
+# NOTE: page_num is the third arg, allowing you to do your own pagination.
+# The result is returned as an array of dictionaries, which individually are sets with data
+# I would reccomend iterating through each page until response is None, which means you're out of pages
+# Normally a delay is needed in real time to avoid timing out the API
 entrants = smash.tournament_show_entrants('smash-summit-10-online', 'melee-singles')
-print(players)
+print(entrants)
 
 # Shows a complete list of bracket ids given tournament and event names
 brackets = smash.tournament_show_event_brackets('smash-summit-10', 'melee-singles')
@@ -84,12 +86,12 @@ print(brackets)
 brackets = tournament_show_all_event_brackets('smash-summit-10-online')
 
 # Shows entrant info and a list of every set that entrant competed in given tournament and event names
-player_sets = smash.tournament_show_entrant_sets('smash-summit-10-online', 'melee-singles', 'Mang0')
-print(player_sets)
+entrant_sets = smash.tournament_show_entrant_sets('smash-summit-10-online', 'melee-singles', 'Mang0')
+print(entrant_sets)
 
-#Show sets between two players for a given tournament and event name
-player_head_to_head = smash.tournament_show_head_to_head('smash-summit-10-online', 'melee-singles', 'Mang0', 'Zain')
-print(player_head_to_head)
+#Show sets between two entrants for a given tournament and event name
+head_to_head = smash.tournament_show_head_to_head('smash-summit-10-online', 'melee-singles', 'Mang0', 'Zain')
+print(head_to_head)
 ```
 
 ## Bracket Usage
@@ -102,18 +104,20 @@ smash = pysmashgg.SmashGG('KEY')
 # These bracket IDs are found from the tournament_show_event_brackets command, as well as others
 
 # Shows players in a certain bracket
-# NOTE: sleep_time is the second arg, but don't touch it unless you
-# you know what you're doing (it is there to make sure you don't get code 429)
-# If you do get Status Code 429, change sleep_time to 30 or so for large tournaments
-bracket_players = smash.bracket_show_entrants(224997)
+# NOTE: page_num is the second arg, allowing you to do your own pagination.
+# The result is returned as an array of dictionaries, which individually are sets with data
+# I would reccomend iterating through each page until response is None, which means you're out of pages
+# Normally a delay is needed in real time to avoid timing out the API
+bracket_players = smash.bracket_show_entrants(224997, 1)
 print(bracket_players)
 
 # Shows sets from a bracket
-# NOTE: sleep_time is the second arg, but don't touch it unless you
-# you know what you're doing (it is there to make sure you don't get code 429)
-# If you do get Status Code 429, change sleep_time to 30 or so for large tournaments
-sets = self.smash.bracket_show_sets(1401911)
-print(sets)
+# NOTE: page_num is the second arg, allowing you to do your own pagination.
+# The result is returned as an array of dictionaries, which individually are sets with data
+# I would reccomend iterating through each page until response is None, which means you're out of pages
+# Normally a delay is needed in real time to avoid timing out the API
+bracket_sets = self.smash.bracket_show_sets(1401911, 1)
+print(bracket_sets)
 ```
 
 ## API Documentation

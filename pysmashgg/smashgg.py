@@ -35,12 +35,12 @@ class SmashGG(object):
         return tournaments.show_events(tournament_name, self.header)
 
     # List of sets for an event -- Probably don't mess with sleep time
-    def tournament_show_sets(self, tournament_name, event_name, sleep_time=15):
-        return tournaments.show_sets(tournament_name, event_name, self.header, sleep_time)
+    def tournament_show_sets(self, tournament_name, event_name, page_num):
+        return tournaments.show_sets(tournament_name, event_name, page_num, self.header)
 
     # List of entrants for an event -- Probably don't mess with sleep time
-    def tournament_show_entrants(self, tournament_name, event_name, sleep_time=15):
-        return tournaments.show_entrants(tournament_name, event_name, self.header, sleep_time)
+    def tournament_show_entrants(self, tournament_name, event_name, page_num):
+        return tournaments.show_entrants(tournament_name, event_name, page_num, self.header)
     
     # Bracket info for an event at a tournament
     def tournament_show_events_brackets(self, tournament_name, event_name):
@@ -59,9 +59,9 @@ class SmashGG(object):
         return tournaments.show_head_to_head(tournament_name, event_name, entrant1_name, entrant2_name, self.header)
 
     # All entrants in a bracket (phaseGroup) at a tournament
-    def bracket_show_entrants(self, bracket_id, sleep_time=15):
-        return tournaments.bracket_show_entrants(bracket_id, sleep_time, self.header)
+    def bracket_show_entrants(self, bracket_id, page_num):
+        return tournaments.bracket_show_entrants(bracket_id, page_num, self.header)
 
     # All sets in a bracket (phaseGroup) at a tournament
-    def bracket_show_sets(self, bracket_id, sleep_time=15):
-        return tournaments.bracket_show_sets(bracket_id, sleep_time, self.header)
+    def bracket_show_sets(self, bracket_id, page_num):
+        return tournaments.bracket_show_sets(bracket_id, page_num, self.header)

@@ -80,37 +80,19 @@ def show_events(tournament_name, header):
 
 # Shows all the sets from an event -- Don't mess with sleep_time unless you need to
 # it acts as an automatic delay so you don't timeout the API
-def show_sets(tournament_name, event_name, header, sleep_time):
+def show_sets(tournament_name, event_name, page_num, header):
     event_id = get_event_id(tournament_name, event_name, header)
-    sets = []
-    for i in range(1, 1000):    # Arbitrary number
-        if i % 8 == 0:
-            sleep(sleep_time) # This is necessary to avoid timing out the API
-        variables = {"eventId": event_id, "page": i}
-        response = filters.show_sets_filter(run_query(SHOW_SETS_QUERY, variables, header))
-        if response == None: # If no pages are left
-            break
-        else: # If there is more data
-            sets = sets + response
-
-    return sets
+    variables = {"eventId": event_id, "page": page_num}
+    response = filters.show_sets_filter(run_query(SHOW_SETS_QUERY, variables, header))
+    return response
             
 # Shows all entrants from a specific event -- Don't mess with sleep_time unless you need to
 # it acts as an automatic delay so you don't timeout the API
-def show_entrants(tournament_name, event_name, header, sleep_time):
+def show_entrants(tournament_name, event_name, page_num, header):
     event_id = get_event_id(tournament_name, event_name, header)
-    entrants = []
-    for i in range(1, 1000):    # Arbitrary number
-        if i % 8 == 0:
-            sleep(sleep_time) # This is necessary to avoid timing out the API
-        variables = {"eventId": event_id, "page": i}
-        response = filters.show_entrants_filter(run_query(SHOW_ENTRANTS_QUERY, variables, header))
-        if response == None: # If no pages are left
-            break
-        else: # If there is more data
-            entrants = entrants + response
-
-    return entrants
+    variables = {"eventId": event_id, "page": page_num}
+    response = filters.show_entrants_filter(run_query(SHOW_ENTRANTS_QUERY, variables, header))
+    return response
 
 # Shows all the event bracket IDs as well as the name and slug of the event
 def show_events_brackets(tournament_name, event_name, header):
@@ -141,32 +123,13 @@ def show_head_to_head(tournament_name, event_name, entrant1_name, entrant2_name,
     return response
 
 # Shows all the players in a bracket (aka phaseGroup)
-def bracket_show_entrants(bracket_id, sleep_time, header):
-    players = []
-
-    for i in range(1, 1000):    # Arbitrary number
-        if i % 8 == 0:
-            sleep(sleep_time) # This is necessary to avoid timing out the API
-        variables = {"phaseGroupId": bracket_id, "page": i}
-        response = filters.bracket_show_entrants_filter(run_query(BRACKET_SHOW_ENTRANTS_QUERY, variables, header))
-        if response == None: # If no pages are left
-            break
-        else: # If there is more data
-            players = players + response
-
-    return players
+def bracket_show_entrants(bracket_id, page_num, header):
+    variables = {"phaseGroupId": bracket_id, "page": page_num}
+    response = filters.bracket_show_entrants_filter(run_query(BRACKET_SHOW_ENTRANTS_QUERY, variables, header))
+    return response
 
 # Shows all the players in a bracket
-def bracket_show_sets(bracket_id, sleep_time, header):
-    sets = []
-    for i in range(1, 1000):    # Arbitrary number
-        if i % 8 == 0:
-            sleep(sleep_time) # This is necessary to avoid timing out the API
-        variables = {"phaseGroupId": bracket_id, "page": i}
-        response = filters.bracket_show_sets_filter(run_query(BRACKET_SHOW_SETS_QUERY, variables, header))
-        if response == None: # If no pages are left
-            break
-        else: # If there is more data
-            sets = sets + response
-
-    return sets
+def bracket_show_sets(bracket_id, page_num, header):
+    variables = {"phaseGroupId": bracket_id, "page": page_num}
+    response = filters.bracket_show_sets_filter(run_query(BRACKET_SHOW_SETS_QUERY, variables, header))
+    return response

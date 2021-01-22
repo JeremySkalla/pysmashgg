@@ -1,11 +1,21 @@
+# v0.3
+
+### The Pagination Update
+
+- Decided to change pagination to user defined, since everyone will have different stuff happening and maybe have a higher rate, and sometimes when APIs get big they start charging for data, so this is a good idea, more detail below
+
+- Allows you to do your own pagination with `tournament_show_sets`, `tournament_show_entrants`, `bracket_show_entrants`, and `bracket_show_sets`
+
+- Minor syntax changes
+
 # v0.2.1/v0.2
 
 ### The Team Events Update / Entrant Update
 
 - Changed function names from player to entrant, because now majority of functions are using entrants as well (or instead of player) -- If you don't recognize a function name when it says updated, it's probably because the name slightly changed
-
-- X: Updated `tournament_show_entrants`, `tournament_show_entrant`, `tournament_show_sets`, `tournament_show_head_to_head`, `tournament_show_entrant_sets`, `bracket_show_players`, and `bracket_show_sets` to run off of entrant id when inputting a player name -- This was changed so this function can now work for team events -- Also displays results differently
-
+-
+- Updated `tournament_show_entrants`, `tournament_show_entrant`, `tournament_show_sets`, `tournament_show_head_to_head`, `tournament_show_entrant_sets`, `bracket_show_players`, and `bracket_show_sets` to run off of entrant id when inputting a player name -- This was changed so this function can now work for team events -- Also displays results differently
+-
 - Updated `get_player_id` to not use pagination and direct get the result -- However, this command is not currently used in this version -- probably will be for new commands in the future
 
 - Added `tournament_show_with_all_brackets(tournament_name)` which acts like `tournament_show_with_brackets(tournament_name, event_name)` but it displays all bracket info at a given tournament
