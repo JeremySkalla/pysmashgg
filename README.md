@@ -3,12 +3,13 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/JeremySkalla/pysmashgg)
 ![PyPI](https://img.shields.io/pypi/v/pysmashgg)
 ![GitHub](https://img.shields.io/github/license/JeremySkalla/pysmashgg)
+[![Downloads](https://pepy.tech/badge/pysmashgg)](https://pepy.tech/project/pysmashgg)
 
 ## Overview
 
 #### SmashGGPy is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
 
-#### Currently in Beta -- v0.3.0 right now! Will be adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!) -- See CHANGELOG.md for the most recent changes
+#### Currently in Beta -- v0.5.0 right now! Will be more adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!) -- See CHANGELOG.md for the most recent changes
 
 ## How to install current version
 
@@ -34,8 +35,6 @@ import SmashGGPy
 # Initialize the SmashGGPy class
 smash = pysmashgg.SmashGG('KEY')
 
-# All results will be returned as normal Python dictionaries
-
 # Show meta information for a tournament
 tournament = smash.tournament_show("smash-summit-10-online")
 print(tournament)
@@ -55,8 +54,6 @@ print(tournament_with_all_brackets)
 import SmashGGPy
 # Initialize the SmashGGPy class
 smash = pysmashgg.SmashGG('KEY')
-
-# All results will be returned as normal Python dictionaries
 
 # Show only a list of events for a tournament (excludes meta data info)
 events = smash.tournament_show_events('smash-summit-10-online')
@@ -94,6 +91,35 @@ head_to_head = smash.tournament_show_head_to_head('smash-summit-10-online', 'mel
 print(head_to_head)
 ```
 
+## Player Usage **NEW IN v0.5**
+
+```python
+import SmashGGPy
+# Initialize the SmashGGPy class
+smash = pysmashgg.SmashGG('KEY')
+
+# Show meta information for a player
+player_info = smash.player_show_info(1000)
+print(player_info)
+
+# Show all tournaments that a player registered for with their smash.gg account
+# this does not include tournaments that players locally registered for
+# and aren't connected to their smash.gg account
+# USE THE LINK IN API DOCUMENATION TO DETERMINE THE VIDEOGAME_ID, THE SECOND ARG
+player_tournaments = smash.player_show_tournaments(1000, 1, 1)
+print(player_tournaments)
+
+# Show all tournaments that a player registered for a specific game in with their
+# smash.gg account
+# This does not include tournaments that players locally registered for
+# and aren't connected to their smash.gg account
+# USE THE LINK BELOW TO DETERMINE THE VIDEOGAME_ID, THE THIRD ARG
+# THE FIRST AND SECOND ARGUMENT NEED TO BE CORRELATED
+# AKA: MANG0'S PLAYER ID IS 1000
+player_tournaments = smash.player_show_tournaments_for_game(1000, "Mang0", 1, 1)
+print(player_tournaments)
+```
+
 ## Bracket Usage
 
 ```python
@@ -103,13 +129,13 @@ smash = pysmashgg.SmashGG('KEY')
 
 # These bracket IDs are found from the tournament_show_event_brackets command, as well as others
 
-# Shows players in a certain bracket
+# Shows entrants in a certain bracket
 # NOTE: page_num is the second arg, allowing you to do your own pagination.
 # The result is returned as an array of dictionaries, which individually are sets with data
 # I would reccomend iterating through each page until response is None, which means you're out of pages
 # Normally a delay is needed in real time to avoid timing out the API
-bracket_players = smash.bracket_show_entrants(224997, 1)
-print(bracket_players)
+bracket_entrants = smash.bracket_show_entrants(224997, 1)
+print(bracket_entrants)
 
 # Shows sets from a bracket
 # NOTE: page_num is the second arg, allowing you to do your own pagination.
@@ -125,3 +151,5 @@ print(bracket_sets)
 #### [Intro](https://developer.smash.gg/docs/intro/)
 
 #### [References](https://developer.smash.gg/reference/)
+
+#### [Videogame ID Spreadsheet](https://docs.google.com/spreadsheets/d/1l-mcho90yDq4TWD-Y9A22oqFXGo8-gBDJP0eTmRpTaQ/)

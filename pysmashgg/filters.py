@@ -351,3 +351,69 @@ def bracket_show_sets_filter(response):
         sets.append(cur_set) # Adding that specific set onto the large list of sets
 
     return sets
+
+def player_get_info_filter(response):
+    if response['data']['player'] is None:
+        return
+
+    player = {}
+
+    player['tag'] = response['data']['player']['gamerTag']
+    player['name'] = response['data']['player']['user']['name']
+    player['bio'] = response['data']['player']['user']['name']
+    player['country'] = response['data']['player']['user']['location']['country']
+    player['state'] = response['data']['player']['user']['location']['state']
+    player['city'] = response['data']['player']['user']['location']['city']
+    player['rankings'] = response['data']['player']['rankings']
+
+    return player
+
+def player_get_tournaments_filter(response):
+    if response['data']['player'] is None:
+        return
+    if response['data']['player']['user']['tournaments']['nodes'] is None:
+        return
+
+    tournaments = []
+
+    for node in response['data']['player']['user']['tournaments']['nodes']:
+        cur_tournament = {}
+        cur_tournament['name'] = node['name']
+        cur_tournament['slug'] = node['slug'].split('/')[-1]
+        cur_tournament['id'] = node['id']
+        cur_tournament['attendees'] = node['numAttendees']
+        cur_tournament['country'] = node['countryCode']
+        cur_tournament['unixTimestamp'] = node['startAt']
+
+        tournaments.append(cur_tournament)
+
+    return tournaments
+
+def player_get_tournaments_for_game(response, videogame_id):
+    if response['data']['player'] is None:
+        return
+    if response['data']['player']['user']['tournaments']['nodes'] is None:
+        return
+
+    tournaments = []
+
+    # This is really janky code because of the really janky query
+    # that I had to submit, but it works! Looking for a better way to make this query still
+    for node in response['data']['player']['user']['tournaments']['nodes']:
+        for event in node['events']:
+            if event['videogame']['id'] == videogame_id and event['entrants']['nodes'] is not None:
+                cur_tournament = {}
+                cur_tournament['name'] = node['name']
+                cur_tournament['slug'] = node['slug'].split('/')[-1]
+                cur_tournament['id'] = node['id']
+                cur_tournament['attendees'] = node['numAttendees']
+                cur_tournament['country'] = node['countryCode']
+                cur_tournament['unixTimestamp'] = node['startAt']
+                cur_tournament['eventName'] = event['name']
+                cur_tournament['eventSlug'] = event['slug'].split('/')[-1]
+                cur_tournament['eventId'] = event['id']
+                cur_tournament['eventEntrants'] = event['numEntrants']
+
+                tournaments.append(cur_tournament)
+
+    return tournaments

@@ -1,3 +1,24 @@
+# v0.5
+
+### **Reorganization / Player Update**
+
+- Added 3 new commands, `player_show_info`, `player_show_tournaments`, and `player_show_tournaments_for_game` (Usage is in README)
+
+- Reorganized code by creating new files:
+
+  - `api.py`
+  - `b_queries.py`
+  - `brackets.py`
+  - `p_queries.py`
+  - `players.py`
+  - `t_queries.py`
+
+- Made code more readable in some places
+
+- Got rid of unecessary imports
+
+(We skipped right to v0.5 because I combined v0.4 (reorganization) with v0.5 (player))
+
 # v0.3
 
 ### The Pagination Update

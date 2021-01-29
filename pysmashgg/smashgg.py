@@ -1,7 +1,5 @@
 import requests
-import json
-from pysmashgg import exceptions, tournaments
-from time import sleep
+from pysmashgg import exceptions, tournaments, brackets, players
 
 class SmashGG(object):
     def __init__(self, key):
@@ -60,8 +58,22 @@ class SmashGG(object):
 
     # All entrants in a bracket (phaseGroup) at a tournament
     def bracket_show_entrants(self, bracket_id, page_num):
-        return tournaments.bracket_show_entrants(bracket_id, page_num, self.header)
+        return brackets.bracket_show_entrants(bracket_id, page_num, self.header)
 
     # All sets in a bracket (phaseGroup) at a tournament
     def bracket_show_sets(self, bracket_id, page_num):
-        return tournaments.bracket_show_sets(bracket_id, page_num, self.header)
+        return brackets.bracket_show_sets(bracket_id, page_num, self.header)
+
+    # Player metadata
+    def player_show_info(self, player_id):
+        return players.show_info(player_id, self.header)
+
+    # All tournaments by a player (where they registered with their smash.gg account)
+    def player_show_tournaments(self, player_id, page_num):
+        return players.show_tournaments(player_id, page_num, self.header)
+    
+    # All tournaments by a player for a certain game
+    # Use https://docs.google.com/spreadsheets/d/1l-mcho90yDq4TWD-Y9A22oqFXGo8-gBDJP0eTmRpTaQ/
+    # to find the game_id you're looking for
+    def player_show_tournaments_for_game(self, player_id, player_name, videogame_id, page_num):
+        return players.show_tournaments_for_game(player_id, player_name, videogame_id, page_num, self.header)
