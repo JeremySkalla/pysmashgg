@@ -96,7 +96,7 @@ def show_entrant_sets(tournament_name, event_name, player_name, header):
 def show_head_to_head(tournament_name, event_name, entrant1_name, entrant2_name, header):
     event_id = get_event_id(tournament_name, event_name, header)
     entrant1_id = get_entrant_id(event_id, entrant1_name, header)
-    variables = variables = {"eventId": event_id, "entrantId": entrant1_id, "page": 1}
+    variables = {"eventId": event_id, "entrantId": entrant1_id, "page": 1}
     response = run_query(SHOW_ENTRANT_SETS_QUERY, variables, header)
     data = filters.show_head_to_head_filter(response, entrant2_name)
     return data
