@@ -2,6 +2,7 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/JeremySkalla/pysmashgg)
 ![PyPI](https://img.shields.io/pypi/v/pysmashgg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/JeremySkalla/AmongUsQueueBot)
 ![GitHub](https://img.shields.io/github/license/JeremySkalla/pysmashgg)
 [![Downloads](https://pepy.tech/badge/pysmashgg)](https://pepy.tech/project/pysmashgg)
 
