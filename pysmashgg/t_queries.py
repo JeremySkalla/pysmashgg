@@ -90,8 +90,6 @@ SHOW_WITH_BRACKETS_QUERY = """query ($tourneySlug: String!) {
 SHOW_EVENTS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     events {
-      id
-      name
       slug
     }
   }
