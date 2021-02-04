@@ -1,4 +1,4 @@
-# SmashGGPy: Python Wrapper for Smash.gg's GraphQL API
+# pysmashgg: Python Wrapper for Smash.gg's GraphQL API
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/JeremySkalla/pysmashgg)
 ![PyPI](https://img.shields.io/pypi/v/pysmashgg)
@@ -8,7 +8,7 @@
 
 ## Overview
 
-#### SmashGGPy is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
+#### pysmashgg is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
 
 #### Currently in Beta -- v0.5.0 right now! Will be more adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!) -- See CHANGELOG.md for the most recent changes
 
