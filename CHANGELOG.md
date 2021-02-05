@@ -1,3 +1,17 @@
+# v0.6
+
+### **Error Checking Update**
+
+- **MAJOR**: All functions should now work with in progress and upcoming tournaments
+
+- Added boolean value `completed` to functions involving sets, letting you know if the sets have been completed or not
+
+- Renamed `tournament_show_event_brackets` from `tournament_show_events_brackets`
+
+- Updated `exceptions.py` because I wrote too many exceptions
+
+- Bug fixes
+
 # v0.5
 
 ### **Reorganization / Player Update**

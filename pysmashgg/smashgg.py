@@ -41,8 +41,8 @@ class SmashGG(object):
         return tournaments.show_entrants(tournament_name, event_name, page_num, self.header)
     
     # Bracket info for an event at a tournament
-    def tournament_show_events_brackets(self, tournament_name, event_name):
-        return tournaments.show_events_brackets(tournament_name, event_name, self.header)
+    def tournament_show_event_brackets(self, tournament_name, event_name):
+        return tournaments.show_event_brackets(tournament_name, event_name, self.header)
     
     # Bracket info for all events at a tournament
     def tournament_show_all_event_brackets(self, tournament_name):

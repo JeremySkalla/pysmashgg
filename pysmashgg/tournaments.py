@@ -41,7 +41,7 @@ def show_with_brackets(tournament_name, event_name, header):
 def show_with_brackets_all(tournament_name, header):
     variables = {"tourneySlug": tournament_name}
     response = run_query(SHOW_WITH_BRACKETS_QUERY, variables, header)
-    data = response['data']['tournament']
+    data = filters.show_with_brackets_all_filter(response)
     return data
 
 # Shows all events from a tournaments
@@ -70,16 +70,16 @@ def show_entrants(tournament_name, event_name, page_num, header):
     return data
 
 # Shows all the event bracket IDs as well as the name and slug of the event
-def show_events_brackets(tournament_name, event_name, header):
+def show_event_brackets(tournament_name, event_name, header):
     variables = {"tourneySlug": tournament_name}
-    response = run_query(SHOW_EVENTS_BRACKETS_QUERY, variables, header)
+    response = run_query(SHOW_EVENT_BRACKETS_QUERY, variables, header)
     data = filters.show_events_brackets_filter(response, event_name)
     return data
 
 # Same as show_events_brackets but for all events at a tournament
 def show_all_event_brackets(tournament_name, header):
     variables = {"tourneySlug": tournament_name}
-    response = run_query(SHOW_EVENTS_BRACKETS_QUERY, variables, header)
+    response = run_query(SHOW_EVENT_BRACKETS_QUERY, variables, header)
     data = filters.show_all_brackets_filter(response)
     return data
 
@@ -96,7 +96,7 @@ def show_entrant_sets(tournament_name, event_name, player_name, header):
 def show_head_to_head(tournament_name, event_name, entrant1_name, entrant2_name, header):
     event_id = get_event_id(tournament_name, event_name, header)
     entrant1_id = get_entrant_id(event_id, entrant1_name, header)
-    variables = {"eventId": event_id, "entrantId": entrant1_id, "page": 1}
+    variables = variables = {"eventId": event_id, "entrantId": entrant1_id, "page": 1}
     response = run_query(SHOW_ENTRANT_SETS_QUERY, variables, header)
     data = filters.show_head_to_head_filter(response, entrant2_name)
     return data

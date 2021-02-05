@@ -10,7 +10,7 @@
 
 #### pysmashgg is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
 
-#### Currently in Beta -- v0.5.0 right now! Will be more adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!) -- See CHANGELOG.md for the most recent changes
+#### Currently in Beta -- v0.6.0 right now! Will be more adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!) -- See CHANGELOG.md for the most recent changes
 
 ## How to install current version
 
@@ -45,7 +45,7 @@ tournament_with_bracket = smash.tournament_show_with_brackets("smash-summit-10-o
 print(tournament_with_bracket)
 
 # Show meta information for a tournament with bracket id for all events
-tournament_with_all_brackets = tournament_show_with_brackets_all('smash-summit-10-online')
+tournament_with_all_brackets = smash.tournament_show_with_brackets_all('smash-summit-10-online')
 print(tournament_with_all_brackets)
 ```
 
@@ -73,7 +73,7 @@ print(sets)
 # The result is returned as an array of dictionaries, which individually are sets with data
 # I would reccomend iterating through each page until response is None, which means you're out of pages
 # Normally a delay is needed in real time to avoid timing out the API
-entrants = smash.tournament_show_entrants('smash-summit-10-online', 'melee-singles')
+entrants = smash.tournament_show_entrants('smash-summit-10-online', 'melee-singles', 1)
 print(entrants)
 
 # Shows a complete list of bracket ids given tournament and event names
@@ -81,7 +81,8 @@ brackets = smash.tournament_show_event_brackets('smash-summit-10', 'melee-single
 print(brackets)
 
 # Shows a complete list of bracket ids for a givern tournament and all events
-brackets = tournament_show_all_event_brackets('smash-summit-10-online')
+brackets = smash.gtournament_show_all_event_brackets('smash-summit-10-online')
+print(brackets)
 
 # Shows entrant info and a list of every set that entrant competed in given tournament and event names
 entrant_sets = smash.tournament_show_entrant_sets('smash-summit-10-online', 'melee-singles', 'Mang0')

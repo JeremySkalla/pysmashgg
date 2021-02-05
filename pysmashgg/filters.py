@@ -30,25 +30,43 @@ def event_id_filter(response, event_name):
 
 # Filtering for the show_with_brackets function
 def show_with_brackets_filter(response, event_name):
-    temp_id = None
+    event_id = None
     for event in response['data']['tournament']['events']:
         if event['slug'].split("/")[-1] == event_name:
-            temp_id = event['id']
+            event_id = event['id']
             event_name_new = event['name']
-            bracket_url = event['slug']
-
+            event_url = event['slug']
+            bracket_ids = []
+            if event['phaseGroups'] is not None:
+                for node in event['phaseGroups']:
+                    bracket_ids.append(node['id'])
+            
             break
     
-    if temp_id is None:
+    if event_id is None:
         print ("Event doesn't exist")
         raise exceptions.EventError
 
     del response['data']['tournament']['events']
     response['data']['tournament']['eventName'] = event_name_new
-    response['data']['tournament']['bracketId'] = temp_id
-    response['data']['tournament']['bracketUrl'] = bracket_url
+    response['data']['tournament']['eventId'] = event_id
+    response['data']['tournament']['eventSlug'] = event_url
+    response['data']['tournament']['bracketIds'] = bracket_ids
 
-    return response
+    return response['data']['tournament']
+
+# Filtering for the show_with_brackets_all function
+def show_with_brackets_all_filter(response):
+    for event in response['data']['tournament']['events']:
+        bracket_ids = []
+        if event['phaseGroups'] is not None:
+            for node in event['phaseGroups']:
+                bracket_ids.append(node['id'])
+
+        del event['phaseGroups']
+        event['bracketIds'] = bracket_ids
+    
+    return response['data']['tournament']
 
 # Filter for the show_events function 
 def show_events_filter(response):
@@ -74,27 +92,39 @@ def show_sets_filter(response):
         cur_set['entrant2Name'] = node['slots'][1]['entrant']['name']
         
         # Next 2 if/else blocks make sure there's a result in, sometimes DQs are weird
-        if node['slots'][0]['standing']['stats']['score']['value'] is not None:
+        # there also could be ongoing matches
+        match_done = True
+        if node['slots'][0]['standing'] is None:
+            cur_set['entrant1Score'] = -1
+            match_done = False
+        elif node['slots'][0]['standing']['stats']['score']['value'] is not None:
             cur_set['entrant1Score'] = node['slots'][0]['standing']['stats']['score']['value']
         else:
             cur_set['entrant1Score'] = -1
         
-        if node['slots'][1]['standing']['stats']['score']['value'] is not None:
+        if node['slots'][1]['standing'] is None:
+            cur_set['entrant2Score'] = -1
+            match_done = False
+        elif node['slots'][1]['standing']['stats']['score']['value'] is not None:
             cur_set['entrant2Score'] = node['slots'][1]['standing']['stats']['score']['value']
         else:
             cur_set['entrant2Score'] = -1
 
         # Determining winner/loser (elif because sometimes smashgg won't give us one)
-        if node['slots'][0]['standing']['placement'] == 1:
-            cur_set['winnerId'] = cur_set['entrant1Id']
-            cur_set['loserId'] = cur_set['entrant2Id']
-            cur_set['winnerName'] = cur_set['entrant1Name']
-            cur_set['loserName'] = cur_set['entrant2Name']
-        elif node['slots'][0]['standing']['placement'] == 2:
-            cur_set['winnerId'] = cur_set['entrant2Id']
-            cur_set['loserId'] = cur_set['entrant1Id']
-            cur_set['winnerName'] = cur_set['entrant2Name']
-            cur_set['loserName'] = cur_set['entrant1Name']
+        if match_done:
+            cur_set['completed'] = True
+            if node['slots'][0]['standing']['placement'] == 1:
+                cur_set['winnerId'] = cur_set['entrant1Id']
+                cur_set['loserId'] = cur_set['entrant2Id']
+                cur_set['winnerName'] = cur_set['entrant1Name']
+                cur_set['loserName'] = cur_set['entrant2Name']
+            elif node['slots'][0]['standing']['placement'] == 2:
+                cur_set['winnerId'] = cur_set['entrant2Id']
+                cur_set['loserId'] = cur_set['entrant1Id']
+                cur_set['winnerName'] = cur_set['entrant2Name']
+                cur_set['loserName'] = cur_set['entrant1Name']
+        else:
+            cur_set['completed'] = False
 
         cur_set['bracketName'] = node['phaseGroup']['phase']['name']
         cur_set['bracketId'] = node['phaseGroup']['id']
@@ -126,7 +156,10 @@ def show_entrants_filter(response):
         cur_entrant['entrantId'] = node['entrant']['id']
         cur_entrant['tag'] = node['entrant']['name']
         cur_entrant['finalPlacement'] = node['placement']
-        cur_entrant['seed'] = node['entrant']['seeds'][0]['seedNum']
+        if node['entrant']['seeds'] is None:
+            cur_entrant['seed'] = -1
+        else:
+            cur_entrant['seed'] = node['entrant']['seeds'][0]['seedNum']
 
         players = []
         for user in node['entrant']['participants']:
@@ -164,8 +197,9 @@ def show_all_brackets_filter(response):
     for event in response['data']['tournament']['events']:
         cur_bracket = {}
         bracket_ids = []
-        for node in event['phaseGroups']:
-            bracket_ids.append(node['id'])
+        if event['phaseGroups'] is not None:
+            for node in event['phaseGroups']:
+                bracket_ids.append(node['id'])
 
         cur_bracket['eventName'] = event['name']
         cur_bracket['slug'] = event['slug']
@@ -191,27 +225,38 @@ def show_entrant_sets_filter(response):
         cur_set['entrant2Name'] = node['slots'][1]['entrant']['name']
         
         # Next 2 if/else blocks make sure there's a result in, sometimes DQs are weird
-        if node['slots'][0]['standing']['stats']['score']['value'] is not None:
+        match_done = True
+        if node['slots'][0]['standing'] is None:
+            cur_set['entrant1Score'] = -1
+            match_done = False
+        elif node['slots'][0]['standing']['stats']['score']['value'] is not None:
             cur_set['entrant1Score'] = node['slots'][0]['standing']['stats']['score']['value']
         else:
             cur_set['entrant1Score'] = -1
         
-        if node['slots'][1]['standing']['stats']['score']['value'] is not None:
+        if node['slots'][1]['standing'] is None:
+            cur_set['entrant2Score'] = -1
+            match_done = False
+        elif node['slots'][1]['standing']['stats']['score']['value'] is not None:
             cur_set['entrant2Score'] = node['slots'][1]['standing']['stats']['score']['value']
         else:
             cur_set['entrant2Score'] = -1
 
         # Determining winner/loser (elif because sometimes smashgg won't give us one)
-        if node['slots'][0]['standing']['placement'] == 1:
-            cur_set['winnerId'] = cur_set['entrant1Id']
-            cur_set['loserId'] = cur_set['entrant2Id']
-            cur_set['winnerName'] = cur_set['entrant1Name']
-            cur_set['loserName'] = cur_set['entrant2Name']
-        elif node['slots'][0]['standing']['placement'] == 2:
-            cur_set['winnerId'] = cur_set['entrant2Id']
-            cur_set['loserId'] = cur_set['entrant1Id']
-            cur_set['winnerName'] = cur_set['entrant2Name']
-            cur_set['loserName'] = cur_set['entrant1Name']
+        if match_done:
+            cur_set['completed'] = True
+            if node['slots'][0]['standing']['placement'] == 1:
+                cur_set['winnerId'] = cur_set['entrant1Id']
+                cur_set['loserId'] = cur_set['entrant2Id']
+                cur_set['winnerName'] = cur_set['entrant1Name']
+                cur_set['loserName'] = cur_set['entrant2Name']
+            elif node['slots'][0]['standing']['placement'] == 2:
+                cur_set['winnerId'] = cur_set['entrant2Id']
+                cur_set['loserId'] = cur_set['entrant1Id']
+                cur_set['winnerName'] = cur_set['entrant2Name']
+                cur_set['loserName'] = cur_set['entrant1Name']
+        else:
+            cur_set['completed'] = False
 
         cur_set['setRound'] = node['fullRoundText']
         cur_set['bracketId'] = node['phaseGroup']['id']
@@ -243,32 +288,43 @@ def show_head_to_head_filter(response, player2_name):
             cur_set['entrant2Name'] = node['slots'][1]['entrant']['name']
             
             # Next 2 if/else blocks make sure there's a result in, sometimes DQs are weird
-            if node['slots'][0]['standing']['stats']['score']['value'] is not None:
+            match_done = True
+            if node['slots'][0]['standing'] is None:
+                cur_set['entrant1Score'] = -1
+                match_done = False
+            elif node['slots'][0]['standing']['stats']['score']['value'] is not None:
                 cur_set['entrant1Score'] = node['slots'][0]['standing']['stats']['score']['value']
             else:
                 cur_set['entrant1Score'] = -1
             
-            if node['slots'][1]['standing']['stats']['score']['value'] is not None:
+            if node['slots'][1]['standing'] is None:
+                cur_set['entrant2Score'] = -1
+                match_done = False
+            elif node['slots'][1]['standing']['stats']['score']['value'] is not None:
                 cur_set['entrant2Score'] = node['slots'][1]['standing']['stats']['score']['value']
             else:
                 cur_set['entrant2Score'] = -1
 
             # Determining winner/loser (elif because sometimes smashgg won't give us one)
-            if node['slots'][0]['standing']['placement'] == 1:
-                cur_set['winnerId'] = cur_set['entrant1Id']
-                cur_set['loserId'] = cur_set['entrant2Id']
-                cur_set['winnerName'] = cur_set['entrant1Name']
-                cur_set['loserName'] = cur_set['entrant2Name']
-            elif node['slots'][0]['standing']['placement'] == 2:
-                cur_set['winnerId'] = cur_set['entrant2Id']
-                cur_set['loserId'] = cur_set['entrant1Id']
-                cur_set['winnerName'] = cur_set['entrant2Name']
-                cur_set['loserName'] = cur_set['entrant1Name']
+            if match_done:
+                cur_set['completed'] = True
+                if node['slots'][0]['standing']['placement'] == 1:
+                    cur_set['winnerId'] = cur_set['entrant1Id']
+                    cur_set['loserId'] = cur_set['entrant2Id']
+                    cur_set['winnerName'] = cur_set['entrant1Name']
+                    cur_set['loserName'] = cur_set['entrant2Name']
+                elif node['slots'][0]['standing']['placement'] == 2:
+                    cur_set['winnerId'] = cur_set['entrant2Id']
+                    cur_set['loserId'] = cur_set['entrant1Id']
+                    cur_set['winnerName'] = cur_set['entrant2Name']
+                    cur_set['loserName'] = cur_set['entrant1Name']
+            else:
+                cur_set['completed'] = False
 
             cur_set['setRound'] = node['fullRoundText']
             cur_set['bracketId'] = node['phaseGroup']['id']
 
-            sets.append(cur_set)    # Adding that specific set onto the large list of sets
+            sets.append(cur_set)
     
     return sets
 
@@ -314,27 +370,38 @@ def bracket_show_sets_filter(response):
         cur_set['entrant2Name'] = node['slots'][1]['entrant']['name']
         
         # Next 2 if/else blocks make sure there's a result in, sometimes DQs are weird
-        if node['slots'][0]['standing']['stats']['score']['value'] is not None:
+        match_done = True
+        if node['slots'][0]['standing'] is None:
+            cur_set['entrant1Score'] = -1
+            match_done = False
+        elif node['slots'][0]['standing']['stats']['score']['value'] is not None:
             cur_set['entrant1Score'] = node['slots'][0]['standing']['stats']['score']['value']
         else:
             cur_set['entrant1Score'] = -1
         
-        if node['slots'][1]['standing']['stats']['score']['value'] is not None:
+        if node['slots'][0]['standing'] is None:
+            cur_set['entrant2Score'] = -1
+            match_done = False
+        elif node['slots'][1]['standing']['stats']['score']['value'] is not None:
             cur_set['entrant2Score'] = node['slots'][1]['standing']['stats']['score']['value']
         else:
             cur_set['entrant2Score'] = -1
 
         # Determining winner/loser (elif because sometimes smashgg won't give us one)
-        if node['slots'][0]['standing']['placement'] == 1:
-            cur_set['winnerId'] = cur_set['entrant1Id']
-            cur_set['loserId'] = cur_set['entrant2Id']
-            cur_set['winnerName'] = cur_set['entrant1Name']
-            cur_set['loserName'] = cur_set['entrant2Name']
-        elif node['slots'][0]['standing']['placement'] == 2:
-            cur_set['winnerId'] = cur_set['entrant2Id']
-            cur_set['loserId'] = cur_set['entrant1Id']
-            cur_set['winnerName'] = cur_set['entrant2Name']
-            cur_set['loserName'] = cur_set['entrant1Name']
+        if match_done:
+            cur_set['completed'] = True
+            if node['slots'][0]['standing']['placement'] == 1:
+                cur_set['winnerId'] = cur_set['entrant1Id']
+                cur_set['loserId'] = cur_set['entrant2Id']
+                cur_set['winnerName'] = cur_set['entrant1Name']
+                cur_set['loserName'] = cur_set['entrant2Name']
+            elif node['slots'][0]['standing']['placement'] == 2:
+                cur_set['winnerId'] = cur_set['entrant2Id']
+                cur_set['loserId'] = cur_set['entrant1Id']
+                cur_set['winnerName'] = cur_set['entrant2Name']
+                cur_set['loserName'] = cur_set['entrant1Name']
+        else:
+            cur_set['completed'] = False
 
         cur_set['bracketName'] = bracket_name
 

@@ -83,6 +83,9 @@ SHOW_WITH_BRACKETS_QUERY = """query ($tourneySlug: String!) {
       id
       name
       slug
+      phaseGroups {
+        id
+      }
     }
   }
 }"""
@@ -90,6 +93,8 @@ SHOW_WITH_BRACKETS_QUERY = """query ($tourneySlug: String!) {
 SHOW_EVENTS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     events {
+      id
+      name
       slug
     }
   }
@@ -160,7 +165,7 @@ SHOW_ENTRANTS_QUERY = """query EventStandings($eventId: ID!, $page: Int!) {
   }
 }"""
 
-SHOW_EVENTS_BRACKETS_QUERY = """query ($tourneySlug: String!) {
+SHOW_EVENT_BRACKETS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     events {
       name
