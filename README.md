@@ -1,4 +1,4 @@
-# pysmashgg: Python Wrapper for Smash.gg's GraphQL API
+# **pysmashgg: Python Wrapper for Smash.gg's GraphQL API**
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/JeremySkalla/pysmashgg)
 ![PyPI](https://img.shields.io/pypi/v/pysmashgg)
@@ -6,7 +6,7 @@
 ![GitHub](https://img.shields.io/github/license/JeremySkalla/pysmashgg)
 [![Downloads](https://pepy.tech/badge/pysmashgg)](https://pepy.tech/project/pysmashgg)
 
-## Overview
+## **Overview**
 
 #### pysmashgg is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
 
@@ -18,17 +18,17 @@
 
 - PyPI Page: [https://pypi.org/project/pysmashgg/](https://pypi.org/project/pysmashgg/)
 
-## Required packages
+## **Required packages**
 
 - Requests - `pip install requests`
 
-## Motivation
+## **Motivation**
 
 I decided to make this project because I started working with smash.gg's API not too long ago, and I didn't have any experience using APIs or anything, and I found PySmash. It's using the older API, and its functionality is now limited. SmashGGPy has the same commands as PySmash with slightly different responses (but mostly the same) using the updated API. In the future, I am looking to add more commands (some have already been added).
 
 However, I would like to say I think the best thing to do with this project if you're looking to interact with the API a lot is learn how the code works, learn how to interact with a GraphQL API, and send your own requests! I hope that this code can be of help to those who want to develop much larger applications but don't know where to start! Of course, this is going to be helpful but limited compared to the entire scope of the API, but should be very helpful nonetheless, especially in terms of getting a bunch of data.
 
-## Metadata Usage
+## **Metadata Usage**
 
 ```python
 import SmashGGPy
@@ -49,7 +49,7 @@ tournament_with_all_brackets = smash.tournament_show_with_brackets_all('smash-su
 print(tournament_with_all_brackets)
 ```
 
-## Convenience Usage
+## **Convenience Usage**
 
 ```python
 import SmashGGPy
@@ -148,7 +148,13 @@ bracket_sets = self.smash.bracket_show_sets(1401911, 1)
 print(bracket_sets)
 ```
 
-## API Documentation
+## **Thank You**
+
+- #### **Petercat12** created pysmash, which this was inspired off of
+- #### **F0ne** who helped me in the smashgg dev discord a lot when I was starting out!
+- #### **All of my friends** who I've annoyed talking about this project
+
+## **API Documentation**
 
 #### [Intro](https://developer.smash.gg/docs/intro/)
 
