@@ -1,4 +1,4 @@
-# Next Version (UPCOMING)
+# **Next Version (UPCOMING)**
 
 - Adding default events
 
@@ -8,7 +8,7 @@
 
 - More commands for tournaments
 
-# v0.6
+# **v0.6**
 
 ### **Error Checking Update**
 
@@ -22,7 +22,7 @@
 
 - Bug fixes
 
-# v0.5
+# **v0.5**
 
 ### **Reorganization / Player Update**
 
@@ -43,7 +43,7 @@
 
 (We skipped right to v0.5 because I combined v0.4 (reorganization) with v0.5 (player))
 
-# v0.3
+# **v0.3**
 
 ### The Pagination Update
 
@@ -53,7 +53,7 @@
 
 - Minor syntax changes
 
-# v0.2.1/v0.2
+# **v0.2.1/v0.2**
 
 ### The Team Events Update / Entrant Update
 
@@ -79,6 +79,6 @@
 
 - Quite a few other minor changes
 
-# v0.1
+# **v0.1**
 
 - released project

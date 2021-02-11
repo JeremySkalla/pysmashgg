@@ -1,9 +1,9 @@
 # **pysmashgg: Python Wrapper for Smash.gg's GraphQL API**
 
-![GitHub last commit](https://img.shields.io/github/last-commit/JeremySkalla/pysmashgg)
-![PyPI](https://img.shields.io/pypi/v/pysmashgg)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/JeremySkalla/pysmashgg)
-![GitHub](https://img.shields.io/github/license/JeremySkalla/pysmashgg)
+![GitHub last commit](https://img.shields.io/github/last-commit/JeremySkalla/pysmashgg?style=flat-square)
+![PyPI](https://img.shields.io/pypi/v/pysmashgg?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/JeremySkalla/pysmashgg?style=flat-square)
+![GitHub](https://img.shields.io/github/license/JeremySkalla/pysmashgg?style=flat-square)
 [![Downloads](https://pepy.tech/badge/pysmashgg)](https://pepy.tech/project/pysmashgg)
 
 ## **Overview**
@@ -93,7 +93,7 @@ head_to_head = smash.tournament_show_head_to_head('smash-summit-10-online', 'mel
 print(head_to_head)
 ```
 
-## Player Usage **NEW IN v0.5**
+## Player Usage
 
 ```python
 import SmashGGPy
