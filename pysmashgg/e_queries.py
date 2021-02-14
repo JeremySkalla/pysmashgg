@@ -1,23 +1,4 @@
-# Queries for tournaments.py
-
-PLAYER_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
-    event(id: $eventId) {
-    entrants(query: {
-      page: 1
-      perPage: 32
-      filter: {name: $name}
-    }) {
-      nodes {
-        participants {
-          gamerTag
-          player {
-            id 
-          }
-        }
-      }
-    }
-    }
-    }"""
+# Queries for events.py
 
 ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
     event(id: $eventId) {
@@ -36,69 +17,6 @@ ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
     }
     }"""
 
-EVENT_ID_QUERY = """query ($tourneySlug: String!) {
-  tournament(slug: $tourneySlug) {
-    events {
-      id
-      slug
-    }
-  }
-}"""
-
-SHOW_QUERY = """query ($tourneySlug: String!) {
-  tournament(slug: $tourneySlug) {
-    id
-    venueName
-    venueAddress
-    name
-    url
-    links {
-      facebook
-      discord
-    }
-    addrState
-    startAt
-    endAt
-    numAttendees
-  }
-}"""
-
-
-SHOW_WITH_BRACKETS_QUERY = """query ($tourneySlug: String!) {
-  tournament(slug: $tourneySlug) {
-    id
-    venueName
-    venueAddress
-    name
-    url
-    links {
-      facebook
-      discord
-    }
-    addrState
-    startAt
-    endAt
-    numAttendees
-    events {
-      id
-      name
-      slug
-      phaseGroups {
-        id
-      }
-    }
-  }
-}"""
-
-SHOW_EVENTS_QUERY = """query ($tourneySlug: String!) {
-  tournament(slug: $tourneySlug) {
-    events {
-      id
-      name
-      slug
-    }
-  }
-}"""
 
 SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
   event(id: $eventId) {
@@ -165,18 +83,6 @@ SHOW_ENTRANTS_QUERY = """query EventStandings($eventId: ID!, $page: Int!) {
   }
 }"""
 
-SHOW_EVENT_BRACKETS_QUERY = """query ($tourneySlug: String!) {
-  tournament(slug: $tourneySlug) {
-    events {
-      name
-      slug
-      phaseGroups {
-        id
-      }
-    }
-  }
-}"""
-
 SHOW_ENTRANT_SETS_QUERY = """query EventSets($eventId: ID!, $entrantId: ID!, $page: Int!) {
   event(id: $eventId) {
     sets(
@@ -204,36 +110,6 @@ SHOW_ENTRANT_SETS_QUERY = """query EventSets($eventId: ID!, $entrantId: ID!, $pa
           }
         }
         phaseGroup {
-          id
-        }
-      }
-    }
-  }
-}"""
-
-SHOW_EVENT_BY_GAME_SIZE_DATED_QUERY = """query TournamentsByVideogame($page: Int!, $videogameId: [ID!], $after: Timestamp!, $before: Timestamp!) {
-  tournaments(query: {
-    perPage: 32
-    page: $page
-    sortBy: "startAt asc"
-    filter: {
-      past: false
-      videogameIds: $videogameId
-      afterDate: $after
-      beforeDate: $before
-    }
-  }) {
-    nodes {
-      name
-      id
-      slug
-      isOnline
-      endAt
-      events {
-        name
-        id
-        numEntrants
-        videogame {
           id
         }
       }

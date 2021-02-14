@@ -484,3 +484,44 @@ def player_get_tournaments_for_game(response, videogame_id):
                 tournaments.append(cur_tournament)
 
     return tournaments
+
+def show_event_by_game_size_dated_filter(response, size, videogame_id):
+    if response['data']['tournaments'] is None:
+        return
+    
+    events = []
+
+    for node in response['data']['tournaments']['nodes']:
+        for event in node['events']:
+            if event['videogame']['id'] == videogame_id and event['numEntrants'] >= size:
+                cur_event = {}
+                cur_event['tournamentName'] = node['name']
+                cur_event['tournamentSlug'] = node['slug'].split('/')[-1]
+                cur_event['tournamentId'] = node['id']
+                cur_event['online'] = node['isOnline']
+                cur_event['endAt'] = node['endAt']
+                cur_event['eventName'] = event['name']
+                cur_event['eventId'] = event['id']
+                cur_event['numEntrants'] = event['numEntrants']
+
+                events.append(cur_event)
+
+    return events
+
+def show_lightweight_results_filter(response):
+    if response['data']['event'] is None:
+        return
+    if response['data']['event']['standings']['nodes'] is None:
+        return
+
+    entrants = []
+
+    for node in response['data']['event']['standings']['nodes']:
+        cur_entrant = {}
+        cur_entrant['placement'] = node['placement']
+        cur_entrant['name'] = node['entrant']['name'].split(' | ')[-1]
+        cur_entrant['id'] = node['entrant']['id']
+
+        entrants.append(cur_entrant)
+
+    return entrants

@@ -1,18 +1,31 @@
-# **Next Version (UPCOMING)**
+# **UPCOMING CHANGES AT SOME POINT (before v1.0 hopefully)**
 
-- Adding default events
+- Tests (maybe? Not sure how to implement)
+
+- I'm honestly pretty out of ideas, if anyone has ideas let me know!
+
+# **v0.8 (Combined v0.8/v0.7)**
 
 - Ability to have event as event_id (if you have it saved)
+  - This was done with a whole new set of commands, the same name as the ones before but with `event_` instead of `tournament_` at the start
+    - List of Commands:
+      - `event_show_sets(event_id, page_num)`
+      - `event_show_entrants(event_id, page_num)`
+      - `event_show_entrant_sets(event_id, entrant_name)`
+      - `event_show_head_to_head(event_id, entrant1_name, entrant2_name)`
+  - This is done if you have a lot of data from one tournament, because currently with how smashgg's API works, it needs to send a query to get the event_id if you have the name of the tournament and the event -- In short, this saves a query, which will make you be able to do pagination faster
+    - For example, if you need to go through 30 pages of a tournament result, using `event_`, you'll only be sending 30 queries instead of 60 with `tournament_`
+    - This is encouraged to be used
 
-- Tests included with package
+- Added `tournament_show_event_id(tournament_name, event_name)` to retrieve just the event_id
 
-- More commands for tournaments
+- Added `tournament_show_event_by_game_size_dated(size, videogame_id, after, before, page_num)` which finds all tournaments with events (of a certain game) of a minimum size in between two unix timestamps
 
 # **v0.6**
 
 ### **Error Checking Update**
 
-- **MAJOR**: All functions should now work with in progress and upcoming tournaments
+- All functions should now work with in progress and upcoming tournaments
 
 - Added boolean value `completed` to functions involving sets, letting you know if the sets have been completed or not
 

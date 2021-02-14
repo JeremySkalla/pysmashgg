@@ -51,8 +51,7 @@ def show_events(tournament_name, header):
     data = filters.show_events_filter(response)
     return data
 
-# Shows all the sets from an event -- Don't mess with sleep_time unless you need to
-# it acts as an automatic delay so you don't timeout the API
+# Shows all the sets from an event 
 def show_sets(tournament_name, event_name, page_num, header):
     event_id = get_event_id(tournament_name, event_name, header)
     variables = {"eventId": event_id, "page": page_num}
@@ -60,8 +59,7 @@ def show_sets(tournament_name, event_name, page_num, header):
     data = filters.show_sets_filter(response)
     return data
             
-# Shows all entrants from a specific event -- Don't mess with sleep_time unless you need to
-# it acts as an automatic delay so you don't timeout the API
+# Shows all entrants from a specific event
 def show_entrants(tournament_name, event_name, page_num, header):
     event_id = get_event_id(tournament_name, event_name, header)
     variables = {"eventId": event_id, "page": page_num}
@@ -84,9 +82,9 @@ def show_all_event_brackets(tournament_name, header):
     return data
 
 # Shows all entrant sets from a given event
-def show_entrant_sets(tournament_name, event_name, player_name, header):
+def show_entrant_sets(tournament_name, event_name, entrant_name, header):
     event_id = get_event_id(tournament_name, event_name, header)
-    entrant_id = get_entrant_id(event_id, player_name, header)
+    entrant_id = get_entrant_id(event_id, entrant_name, header)
     variables = {"eventId": event_id, "entrantId": entrant_id, "page": 1}
     response = run_query(SHOW_ENTRANT_SETS_QUERY, variables, header)
     data = filters.show_entrant_sets_filter(response)
@@ -96,7 +94,22 @@ def show_entrant_sets(tournament_name, event_name, player_name, header):
 def show_head_to_head(tournament_name, event_name, entrant1_name, entrant2_name, header):
     event_id = get_event_id(tournament_name, event_name, header)
     entrant1_id = get_entrant_id(event_id, entrant1_name, header)
-    variables = variables = {"eventId": event_id, "entrantId": entrant1_id, "page": 1}
+    variables = {"eventId": event_id, "entrantId": entrant1_id, "page": 1}
     response = run_query(SHOW_ENTRANT_SETS_QUERY, variables, header)
     data = filters.show_head_to_head_filter(response, entrant2_name)
+    return data
+
+# Shows all events (of a certain game) of a minimum size in between two unix timestamps
+def show_event_by_game_size_dated(num_entrants, videogame_id, after, before, page_num, header):
+    variables = {"videogameId": videogame_id, "after": after, "before": before, "page": page_num}
+    response = run_query(SHOW_EVENT_BY_GAME_SIZE_DATED_QUERY, variables, header)
+    data = filters.show_event_by_game_size_dated_filter(response, num_entrants, videogame_id)
+    return data
+
+# Shows the results of an event with only entrant name, id, and placement
+def show_lightweight_results(tournament_name, event_name, page_num, header):
+    event_id = get_event_id(tournament_name, event_name, header)
+    variables = {"eventId": event_id, "page": page_num}
+    response = run_query(SHOW_LIGHTWEIGHT_RESULTS_QUERY, variables, header)
+    data = filters.show_lightweight_results_filter(response)
     return data
