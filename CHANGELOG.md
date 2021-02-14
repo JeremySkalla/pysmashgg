@@ -15,6 +15,7 @@
       - `event_show_entrants(event_id, page_num)`
       - `event_show_entrant_sets(event_id, entrant_name)`
       - `event_show_head_to_head(event_id, entrant1_name, entrant2_name)`
+      - `event_show_lightweight_results(event_id, page_num)`
   - This is done if you have a lot of data from one tournament, because currently with how smashgg's API works, it needs to send a query to get the event_id if you have the name of the tournament and the event -- In short, this saves a query, which will make you be able to do pagination faster
     - For example, if you need to go through 30 pages of a tournament result, using `event_`, you'll only be sending 30 queries instead of 60 with `tournament_`
     - This is encouraged to be used
@@ -22,6 +23,8 @@
 - Added `tournament_show_event_id(tournament_name, event_name)` to retrieve just the event_id
 
 - Added `tournament_show_event_by_game_size_dated(size, videogame_id, after, before, page_num)` which finds all tournaments with events (of a certain game) of a minimum size in between two unix timestamps
+
+- Added `tournament_show_lightweight_results(tournament_name, event_name page_num)`
 
 # **v0.6**
 
