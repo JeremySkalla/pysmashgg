@@ -6,6 +6,8 @@
 
 # **v0.8 (Combined v0.8/v0.7)**
 
+### **Event Update**
+
 - Ability to have event as event_id (if you have it saved)
   - This was done with a whole new set of commands, the same name as the ones before but with `event_` instead of `tournament_` at the start
     - List of Commands:
