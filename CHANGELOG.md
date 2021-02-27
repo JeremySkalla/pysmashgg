@@ -15,7 +15,7 @@
   - `tournament_show_with_brackets_all(tournament_name)`
   - `tournament_show_events(tournament_name)` (just adjusted it from a dictionary with one entry (which was an array) to an array -- this aligns with the rest of the functions like this)
 
-- TODO: Implement tests
+- Implemented tests
 
 - Added lots of error checking (I was missing quite a bit, oops)
 
