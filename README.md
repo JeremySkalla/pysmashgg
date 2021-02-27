@@ -18,7 +18,7 @@
 
 - PyPI Page: [https://pypi.org/project/pysmashgg/](https://pypi.org/project/pysmashgg/)
 
-- Make sure you have your API Key! Go to your developer settings in your profile and create a new token if you don't have it! the `'KEY'` is just a placeholder for whatever your key is
+- Make sure you have your API Key! Go to your developer settings in your profile and create a new token if you don't have it! The `'KEY'` in the examples is just a placeholder for whatever your key is
 
 ## **Required packages**
 
