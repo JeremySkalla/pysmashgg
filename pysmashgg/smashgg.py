@@ -1,5 +1,5 @@
 import requests
-from pysmashgg import exceptions, tournaments, brackets, players, events
+from pysmashgg import exceptions, tournaments, brackets, players, events, leagues
 
 class SmashGG(object):
     def __init__(self, key):
@@ -68,13 +68,29 @@ class SmashGG(object):
     def tournament_show_lightweight_results(self, tournament_name, event_name, page_num):
         return tournaments.show_lightweight_results(tournament_name, event_name, page_num, self.header)
 
+    # All tournaments by country (at least, as many at the API can display)
+    def tournament_show_by_country(self, country_code, page_num):
+        return tournaments.show_by_country(country_code, page_num, self.header)
+
+    # All tournaments by US State
+    def tournament_show_by_state(self, state_code, page_num):
+        return tournaments.show_by_state(state_code, page_num, self.header)
+
+    # All tournaments in a radius of a certain coordinate point
+    def tournament_show_by_radius(self, coordinates, radius, page_num):
+        return tournaments.show_by_radius(coordinates, radius, page_num, self.header)
+
+    # Players from a tournament with a certain sponsor
+    def tournament_show_players_by_sponsor(self, tournament_name, sponsor):
+        return tournaments.show_players_by_sponsor(tournament_name, sponsor, self.header)
+
     # All entrants in a bracket (phaseGroup) at a tournament
     def bracket_show_entrants(self, bracket_id, page_num):
-        return brackets.bracket_show_entrants(bracket_id, page_num, self.header)
+        return brackets.show_entrants(bracket_id, page_num, self.header)
 
     # All sets in a bracket (phaseGroup) at a tournament
     def bracket_show_sets(self, bracket_id, page_num):
-        return brackets.bracket_show_sets(bracket_id, page_num, self.header)
+        return brackets.show_sets(bracket_id, page_num, self.header)
 
     # Player metadata
     def player_show_info(self, player_id):
@@ -109,3 +125,15 @@ class SmashGG(object):
     # Results of an event with only entrant name, id, and placement
     def event_show_lightweight_results(self, event_id, page_num):
         return events.show_lightweight_results(event_id, page_num, self.header)
+
+    # Metadata for a league
+    def league_show(self, league_name):
+        return leagues.show(league_name, self.header)
+
+    # League schedule (with events mainly, events at each tournament)
+    def league_show_schedule(self, league_name, page_num):
+        return leagues.show_schedule(league_name, page_num, self.header)
+    
+    # League standings
+    def league_show_standings(self, league_name, page_num):
+        return leagues.show_standings(league_name, page_num, self.header)

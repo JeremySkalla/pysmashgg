@@ -2,6 +2,8 @@ from pysmashgg import filters
 from pysmashgg.t_queries import *
 from pysmashgg.api import run_query
 
+# HELPER FUNCTIONS
+
 # Helper function to get playerId at an event
 def get_player_id(event_id, player_name, header):
     variables = {"eventId": event_id, "name": player_name}
@@ -23,11 +25,13 @@ def get_event_id(tournament_name, event_name, header):
     data = filters.event_id_filter(response, event_name)
     return data
 
+# ACTUAL FUNCTIONS
+
 # Metadata for a tournament
 def show(tournament_name, header):
     variables = {"tourneySlug": tournament_name}
     response = run_query(SHOW_QUERY, variables, header)
-    data = response['data']['tournament']
+    data = filters.show_filter(response)
     return data
 
 # Metadata for a tournament with a specific brackets
@@ -78,7 +82,7 @@ def show_event_brackets(tournament_name, event_name, header):
 def show_all_event_brackets(tournament_name, header):
     variables = {"tourneySlug": tournament_name}
     response = run_query(SHOW_EVENT_BRACKETS_QUERY, variables, header)
-    data = filters.show_all_brackets_filter(response)
+    data = filters.show_all_event_brackets_filter(response)
     return data
 
 # Shows all entrant sets from a given event
@@ -112,4 +116,31 @@ def show_lightweight_results(tournament_name, event_name, page_num, header):
     variables = {"eventId": event_id, "page": page_num}
     response = run_query(SHOW_LIGHTWEIGHT_RESULTS_QUERY, variables, header)
     data = filters.show_lightweight_results_filter(response)
+    return data
+
+# Shows a list of tournaments by country
+def show_by_country(country_code, page_num, header):
+    variables = {"countryCode": country_code, "page": page_num}
+    response = run_query(SHOW_BY_COUNTRY_QUERY, variables, header)
+    data = filters.show_by_country_filter(response)
+    return data
+
+# Shows a list of tournaments by US State
+def show_by_state(state_code, page_num, header):
+    variables = {"state": state_code, "page": page_num}
+    response = run_query(SHOW_BY_STATE_QUERY, variables, header)
+    data = filters.show_by_state_filter(response)
+    return data
+
+# Shows a list of tournaments from a certain point within a radius
+def show_by_radius(coordinates, radius, page_num, header):
+    variables = {"coordinates": coordinates, "radius": radius, "page": page_num}
+    response = run_query(SHOW_BY_RADIUS_QUERY, variables, header)
+    data = filters.show_by_radius_filter(response)
+    return data
+
+def show_players_by_sponsor(tournament_name, sponsor, header):
+    variables = {"slug": tournament_name, "sponsor": sponsor}
+    response = run_query(SHOW_PLAYERS_BY_SPONSOR, variables, header)
+    data = filters.show_players_by_sponsor_filter(response)
     return data

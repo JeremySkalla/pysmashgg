@@ -19,6 +19,15 @@ PLAYER_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
     }
     }"""
 
+EVENT_ID_QUERY = """query ($tourneySlug: String!) {
+  tournament(slug: $tourneySlug) {
+    events {
+      id
+      slug
+    }
+  }
+}"""
+
 ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
     event(id: $eventId) {
     entrants(query: {
@@ -36,27 +45,13 @@ ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
     }
     }"""
 
-EVENT_ID_QUERY = """query ($tourneySlug: String!) {
-  tournament(slug: $tourneySlug) {
-    events {
-      id
-      slug
-    }
-  }
-}"""
-
 SHOW_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     id
-    venueName
-    venueAddress
     name
-    url
-    links {
-      facebook
-      discord
-    }
+    countryCode
     addrState
+    city
     startAt
     endAt
     numAttendees
@@ -67,15 +62,10 @@ SHOW_QUERY = """query ($tourneySlug: String!) {
 SHOW_WITH_BRACKETS_QUERY = """query ($tourneySlug: String!) {
   tournament(slug: $tourneySlug) {
     id
-    venueName
-    venueAddress
     name
-    url
-    links {
-      facebook
-      discord
-    }
+    countryCode
     addrState
+    city
     startAt
     endAt
     numAttendees
@@ -96,6 +86,7 @@ SHOW_EVENTS_QUERY = """query ($tourneySlug: String!) {
       id
       name
       slug
+      numEntrants
     }
   }
 }"""
@@ -252,6 +243,105 @@ SHOW_LIGHTWEIGHT_RESULTS_QUERY = """query EventStandings($eventId: ID!, $page: I
         entrant {
           name
           id
+        }
+      }
+    }
+  }
+}"""
+
+SHOW_BY_COUNTRY_QUERY = """query TournamentsByCountry($countryCode: String!, $page: Int!) {
+  tournaments(query: {
+    perPage: 32,
+    page: $page,
+    sortBy: "startAt desc"
+    filter: {
+      countryCode: $countryCode
+    }
+  }) {
+    nodes {
+      id
+      name
+      slug
+      numAttendees
+      addrState
+      city
+      startAt
+      endAt
+      state
+    }
+  }
+}"""
+
+SHOW_BY_STATE_QUERY = """query TournamentsByState($state: String!, $page: Int!) {
+  tournaments(query: {
+    perPage: 32
+    page: $page
+    filter: {
+      addrState: $state
+    }
+  }) {
+    nodes {
+      id
+      name
+      slug
+      numAttendees
+      city
+      startAt
+      endAt
+      state
+    }
+  }
+}"""
+
+SHOW_BY_RADIUS_QUERY = """query ($page: Int, $coordinates: String!, $radius: String!) {
+  tournaments(query: {
+    page: $page
+    perPage: 32
+    filter: {
+      location: {
+        distanceFrom: $coordinates,
+        distance: $radius
+      }
+    }
+  }) {
+    nodes {
+      id
+      name
+      slug
+      numAttendees
+      countryCode
+      addrState
+      city
+      startAt
+      endAt
+      state
+    }
+  }
+}"""
+
+SHOW_PLAYERS_BY_SPONSOR = """query ($slug:String!, $sponsor: String!) {
+  tournament(slug: $slug) {
+    participants(query: {
+      filter: {
+        search: {
+          fieldsToSearch: ["prefix"],
+          searchString: $sponsor
+        }
+      }
+    }) {
+      nodes {
+        id
+        gamerTag
+        user {
+          name
+          location {
+            country
+            state
+            city
+          }
+          player {
+            id
+          }
         }
       }
     }

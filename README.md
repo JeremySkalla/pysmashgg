@@ -10,17 +10,15 @@
 
 #### pysmashgg is a simple wrapper for [smash.gg](https://smash.gg)'s new GraphQL API that takes inspiration from [Petercat12's PySmash](https://github.com/PeterCat12/pysmash), but using the GraphQL API instead of the older, slower one
 
-#### Currently in Beta -- v0.8.0 right now! Will be more adding features that weren't in PySmash in the future (the inspiration, as stated above) (If you have suggestions, feel free to let me know!)
+#### Full release finally! Please see [the changelog](https://github.com/JeremySkalla/pysmashgg/blob/main/CHANGELOG.md) aka CHANGELOG.md to see the changes from version to version!
 
-#### See CHANGELOG.md for the most recent changes
-
-#### **v0.8 implements `event_` commmands, which save a queue each time you use it over the `tournament_` commands of the same name, you just need the event_id, PLEASE LOOK AT CHANGELOG.MD FOR MORE INFO**
-
-## How to install current version
+## **How to install current version**
 
 - `pip install pysmashgg`
 
 - PyPI Page: [https://pypi.org/project/pysmashgg/](https://pypi.org/project/pysmashgg/)
+
+- Make sure you have your API Key! Go to your developer settings in your profile and create a new token if you don't have it! the `'KEY'` is just a placeholder for whatever your key is
 
 ## **Required packages**
 
@@ -40,15 +38,16 @@ import SmashGGPy
 # Initialize the SmashGGPy class
 smash = pysmashgg.SmashGG('KEY')
 
-event = smash.tournament_show_event_id("smash-summit-10-online", "melee-singles")
+# Show event_id for an event, this is for use in the 'event' commands
+event = smash.tournament_show_event_id('smash-summit-10-online', 'melee-singles')
 print(event)
 
 # Show meta information for a tournament
-tournament = smash.tournament_show("smash-summit-10-online")
+tournament = smash.tournament_show('smash-summit-10-online')
 print(tournament)
 
 # Show meta information for a tournament with bracket id for an event
-tournament_with_bracket = smash.tournament_show_with_brackets("smash-summit-10-online", "melee-singles")
+tournament_with_bracket = smash.tournament_show_with_brackets('smash-summit-10-online', 'melee-singles')
 print(tournament_with_bracket)
 
 # Show meta information for a tournament with bracket id for all events
@@ -58,7 +57,7 @@ print(tournament_with_all_brackets)
 
 ## **Tournament Usage**
 
-#### **NOTE: I would reccomend to use `event_` functions for the four functions that overlap, it makes it so you have one less query for each time you run the function, check CHANGELOG.MD v0.8**
+#### **NOTE: I would reccomend to use `event_` functions for the four functions that overlap, it makes it so you have one less query for each time you run the function, check CHANGELOG.md v0.8**
 
 ```python
 import SmashGGPy
@@ -70,18 +69,12 @@ events = smash.tournament_show_events('smash-summit-10-online')
 print(events)
 
 # Shows a complete list of sets given tournament and event names
-# NOTE: page_num is the third arg, allowing you to do your own pagination.
-# The result is returned as an array of dictionaries, which individually are sets with data
-# I would reccomend iterating through each page until response is None, which means you're out of pages
-# Normally a delay is needed in real time to avoid timing out the API
+# NOTE: page_num is the third arg, allowing you to do your own pagination
 sets = smash.tournament_show_sets('smash-summit-10-online', 'melee-singles', 1)
 print(sets)
 
 # Shows a complete list of entrants given tournament and event names
-# NOTE: page_num is the third arg, allowing you to do your own pagination.
-# The result is returned as an array of dictionaries, which individually are sets with data
-# I would reccomend iterating through each page until response is None, which means you're out of pages
-# Normally a delay is needed in real time to avoid timing out the API
+# NOTE: page_num is the third arg, allowing you to do your own pagination
 entrants = smash.tournament_show_entrants('smash-summit-10-online', 'melee-singles', 1)
 print(entrants)
 
@@ -90,8 +83,8 @@ brackets = smash.tournament_show_event_brackets('smash-summit-10', 'melee-single
 print(brackets)
 
 # Shows a complete list of bracket ids for a givern tournament and all events
-brackets = smash.gtournament_show_all_event_brackets('smash-summit-10-online')
-print(brackets)
+brackets_all = smash.tournament_show_all_event_brackets('smash-summit-10-online')
+print(brackets_all)
 
 # Shows entrant info and a list of every set that entrant competed in given tournament and event names
 entrant_sets = smash.tournament_show_entrant_sets('smash-summit-10-online', 'melee-singles', 'Mang0')
@@ -103,15 +96,35 @@ print(head_to_head)
 
 # Shows all events (of a certain game) of a minimum size in between two unix timestamps
 # Use https://docs.google.com/spreadsheets/d/1l-mcho90yDq4TWD-Y9A22oqFXGo8-gBDJP0eTmRpTaQ/ to find the game_id you're looking for
-tournaments = smash.tournament_show_event_by_game_size_dated(20, 1, 1577858400, 1609480800, 1)
-print(tournaments)
+# Args (since this one is unclear): (num_entrants, videogame_id, after, before, page_num)
+tournaments_by_size = smash.tournament_show_event_by_game_size_dated(20, 1, 1577858400, 1609480800, 1)
+print(tournaments_by_size)
 
 # Shows the results of an event with only player name, id, and placement
-results = smash.tournament_show_lightweight_results("smash-summit-10-online", "melee-singles", 1)
+results = smash.tournament_show_lightweight_results('smash-summit-10-online', 'melee-singles', 1)
 print(results)
+
+# Shows tournaments by country using ISO 2 letter codes
+# NOTE: page_num is the second arg, allowing you to do your own pagination
+tournaments_by_country = smash.tournament_show_by_country('US', 1)
+print(tournaments_by_country)
+
+# Shows tournaments by state using normal state abbreviations
+# NOTE: page_num is the second arg, allowing you to do your own pagination
+tournaments_by_state = smash.tournament_show_by_state('MN', 1)
+print(tournaments_by_state)
+
+# Shows tournaments by radius around a point
+# NOTE: page_num is the third arg, allowing you to do your own pagination
+tournaments_by_radius = smash.tournament_show_by_radius('33.7454725,-117.86765300000002', '50mi', 1)
+print(tournaments_by_radius)
+
+# Shows players at tournaments from a certain sponsor/prefix
+players_by_sponsor = smash.tournament_show_players_by_sponsor('genesis-7', 'C9')
+print(players_by_sponsor)
 ```
 
-## **Event Usage (NEW IN V0.8)**
+## **Event Usage**
 
 ```python
 import SmashGGPy
@@ -119,23 +132,17 @@ import SmashGGPy
 smash = pysmashgg.SmashGG('KEY')
 
 # Shows a complete list of sets given tournament and event names
-# NOTE: page_num is the third arg, allowing you to do your own pagination.
-# The result is returned as an array of dictionaries, which individually are sets with data
-# I would reccomend iterating through each page until response is None, which means you're out of pages
-# Normally a delay is needed in real time to avoid timing out the API
+# NOTE: page_num is the third arg, allowing you to do your own pagination
 sets = smash.event_show_sets(529399, 1)
 print(sets)
 
 # Shows a complete list of entrants given tournament and event names
-# NOTE: page_num is the third arg, allowing you to do your own pagination.
-# The result is returned as an array of dictionaries, which individually are sets with data
-# I would reccomend iterating through each page until response is None, which means you're out of pages
-# Normally a delay is needed in real time to avoid timing out the API
+# NOTE: page_num is the third arg, allowing you to do your own pagination
 entrants = smash.event_show_entrants(529399, 1)
 print(entrants)
 
 # Shows entrant info and a list of every set that entrant competed in given tournament and event names
-entrant_sets = smash.event_show_entrant_sets(529399, "Plup")
+entrant_sets = smash.event_show_entrant_sets(529399, 'Plup')
 print(entrant_sets)
 
 # Show sets between two entrants for a given tournament and event name
@@ -171,7 +178,7 @@ print(player_tournaments)
 # Use https://docs.google.com/spreadsheets/d/1l-mcho90yDq4TWD-Y9A22oqFXGo8-gBDJP0eTmRpTaQ/ to find the game_id you're looking for
 # THE FIRST AND SECOND ARGUMENT NEED TO BE CORRELATED
 # AKA: MANG0'S PLAYER ID IS 1000
-player_tournaments = smash.player_show_tournaments_for_game(1000, "Mang0", 1, 1)
+player_tournaments = smash.player_show_tournaments_for_game(1000, 'Mang0', 1, 1)
 print(player_tournaments)
 ```
 
@@ -185,26 +192,64 @@ smash = pysmashgg.SmashGG('KEY')
 # These bracket IDs are found from the tournament_show_event_brackets command, as well as others
 
 # Shows entrants in a certain bracket
-# NOTE: page_num is the second arg, allowing you to do your own pagination.
-# The result is returned as an array of dictionaries, which individually are sets with data
-# I would reccomend iterating through each page until response is None, which means you're out of pages
-# Normally a delay is needed in real time to avoid timing out the API
+# NOTE: page_num is the second arg, allowing you to do your own pagination
 bracket_entrants = smash.bracket_show_entrants(224997, 1)
 print(bracket_entrants)
 
 # Shows sets from a bracket
-# NOTE: page_num is the second arg, allowing you to do your own pagination.
-# The result is returned as an array of dictionaries, which individually are sets with data
-# I would reccomend iterating through each page until response is None, which means you're out of pages
-# Normally a delay is needed in real time to avoid timing out the API
+# NOTE: page_num is the second arg, allowing you to do your own pagination
 bracket_sets = self.smash.bracket_show_sets(1401911, 1)
 print(bracket_sets)
 ```
 
+## **League Usage (NEW IN v1.0)**
+
+```python
+import SmashGGPy
+# Initialize the SmashGGPy class
+smash = pysmashgg.SmashGG('KEY')
+
+# Shows metadata for a league
+league = smash.league_show('brawlhalla-esports-year-six')
+print(league)
+
+# Shows schedule for a league
+# NOTE: page_num is the second arg, allowing you to do your own pagination
+league_schedule = smash.league_show_schedule('brawlhalla-esports-year-six', 1)
+print(league_schedule)
+
+# Shows standings for a league (doesn't work with all leagues, don't blame me)
+# NOTE: page_num is the second arg, allowing you to do your own pagination
+league_standings = smash.league_show_standings('esta-o-brawlhalla-central-de-eventos', 1)
+print(league_standings)
+```
+
+## **Maintenance Usage**
+
+```python
+import SmashGGPy
+# Initialize the SmashGGPy class
+smash = pysmashgg.SmashGG('KEY')
+
+# Set a new key and header
+smash.set_key_and_header('NEW_KEY')
+
+# Print your key
+smash.print_key()
+
+# Print your header
+smash.print_header()
+```
+
+## **Unit Tests**
+
+Pysmashgg has a set of unit tests. There are only 6 because I don't think it's necessary to test all of the commands, but we're testing one from each of the uses (tournament, bracket, etc.). You need a .env file with one variable named KEY that equals a string of your API access key for it to work!
+
 ## **Thank You**
 
-- #### **Petercat12** created pysmash, which this was inspired off of
+- #### **Petercat12** created pysmash, which this was inspired by
 - #### **F0ne** who helped me in the smashgg dev discord a lot when I was starting out!
+- #### **Ryan McGrath** who gave me lots of advice on reddit and helped improve my coding
 - #### **All of my friends** who I've annoyed talking about this project
 
 ## **API Documentation**

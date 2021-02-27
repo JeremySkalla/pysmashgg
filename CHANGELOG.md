@@ -1,12 +1,27 @@
-# **UPCOMING CHANGES AT SOME POINT (before v1.0 hopefully)**
+# **v1.0 FULL RELEASE**
 
-- Tests (maybe? Not sure how to implement)
+- Added a bunch of commands
+  - `league_show(league_name)`
+  - `league_show_schedule(league_name, page_num)`
+  - `league_show_standings(league_name, page_num)`
+  - `tournament_show_by_country(country_code, page_num)`
+  - `tournament_show_by_state(state_code, page_num)`
+  - `tournament_show_by_radius(coordinates, radius, page_num)`
+  - `tournament_show_players_by_sponsor(tournament_name, sponsor)`
 
-- I'm honestly pretty out of ideas, if anyone has ideas let me know!
+- Adjusted return fields of a few functions (this WILL be the last time fields are modified for existing functions -- I cannot guarantee new return fields will not be added, but they won't affect your current scripts from now on)
+  - `tournament_show(tournament_name)`
+  - `tournament_show_event_brackets(tournament_name, event_name)`
+  - `tournament_show_with_brackets_all(tournament_name)`
+  - `tournament_show_events(tournament_name)` (just adjusted it from a dictionary with one entry (which was an array) to an array -- this aligns with the rest of the functions like this)
+
+- TODO: Implement tests
+
+- Added lots of error checking (I was missing quite a bit, oops)
+
+- Reordered filters so it has the same order as the commands in smashgg.py
 
 # **v0.8 (Combined v0.8/v0.7)**
-
-### **Event Update**
 
 - Ability to have event as event_id (if you have it saved)
   - This was done with a whole new set of commands, the same name as the ones before but with `event_` instead of `tournament_` at the start
@@ -15,7 +30,6 @@
       - `event_show_entrants(event_id, page_num)`
       - `event_show_entrant_sets(event_id, entrant_name)`
       - `event_show_head_to_head(event_id, entrant1_name, entrant2_name)`
-      - `event_show_lightweight_results(event_id, page_num)`
   - This is done if you have a lot of data from one tournament, because currently with how smashgg's API works, it needs to send a query to get the event_id if you have the name of the tournament and the event -- In short, this saves a query, which will make you be able to do pagination faster
     - For example, if you need to go through 30 pages of a tournament result, using `event_`, you'll only be sending 30 queries instead of 60 with `tournament_`
     - This is encouraged to be used
@@ -23,8 +37,6 @@
 - Added `tournament_show_event_id(tournament_name, event_name)` to retrieve just the event_id
 
 - Added `tournament_show_event_by_game_size_dated(size, videogame_id, after, before, page_num)` which finds all tournaments with events (of a certain game) of a minimum size in between two unix timestamps
-
-- Added `tournament_show_lightweight_results(tournament_name, event_name page_num)`
 
 # **v0.6**
 
