@@ -1,24 +1,45 @@
+import time
 import requests
-from pysmashgg.exceptions import TooManyRequestsError, ResponseError
+from pysmashgg.exceptions import *
 
 URL = "https://api.smash.gg/gql/alpha"
 
-# Runs the queries
-def run_query(query, variables, header):    # Returns the response or the error code
-    json_request = {'query': query, 'variables': variables}
-    try:
-        request = requests.post(url=URL, json=json_request, headers=header)
-        if request.status_code == 429:
-            raise TooManyRequestsError
-        elif request.status_code > 299 or request.status_code < 200:
-            raise ResponseError
+# Runs queries
+def run_query(query, variables, header):
+    # This helper function is necessary for TooManyRequestsErrors
+    def _run_query(query, variables, header, seconds): 
+        json_request = {'query': query, 'variables': variables}
+        try:
+            request = requests.post(url=URL, json=json_request, headers=header)
+            if request.status_code == 400:
+                raise RequestError
+            elif request.status_code == 429:
+                raise TooManyRequestsError
+            elif 400 <= request.status_code < 500:
+                raise ResponseError
+            elif 500 <= request.status_code < 600:
+                raise ServerError
+            else:
+                raise NoIdeaError
 
-        response = request.json()
-        return response
+            response = request.json()
+            return response
 
-    except TooManyRequestsError:
-        print("Sending too many requests right now, try again in like 30 seconds -- this will usually fix the error")
-    except ResponseError:
-        print("Unknown error, error code: " + str(request.status_code))
+        except RequestError:
+            print("Error 400: Bad request (probably means your key is wrong)")
+            return
+        except TooManyRequestsError:
+            print("Error 429: Sending too many requests right now, trying again in {} seconds".format(seconds))
+            time.sleep(seconds)
+            return _run_query(query, variables, header, seconds*2)
+        except ResponseError:
+            print("Error {}: Unknown request error".format(request.status_code))
+            return
+        except ServerError:
+            print("Error {}: Unknown server error".format(request.status_code))
+            return
+        except NoIdeaError:
+            print("Error {}: I literally have no idea how you got this status code, please send this to me".format(request.status_code))
+            return
 
-    return
+    return _run_query(query, variables, header, 5)
