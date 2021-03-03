@@ -1,0 +1,1 @@
+from pysmashgg.smashgg import SmashGG

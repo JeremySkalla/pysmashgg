@@ -1,5 +1,2 @@
 __pycache__/
-build/
-dist/
-pysmashgg.egg-info/
 .env
