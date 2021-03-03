@@ -1,5 +1,5 @@
 import requests
-from pysmashgg import exceptions, tournaments, brackets, players, events, leagues
+from pysmashgg import exceptions, tournaments, brackets, players, events, leagues, api
 
 class SmashGG(object):
     def __init__(self, key):
@@ -9,6 +9,10 @@ class SmashGG(object):
     def set_key_and_header(self, new_key):
         self.key = new_key
         self.header = {"Authorization": "Bearer " + new_key}
+
+    # Sets automatic retry, a variable that says if run_query retries if too many requests
+    def set_automatic_retry(self, boo):
+        api.set_auto_retry(boo)
 
     def print_key(self):
         print(self.key)

@@ -2,7 +2,11 @@ import time
 import requests
 from pysmashgg.exceptions import *
 
-URL = "https://api.smash.gg/gql/alpha"
+AUTO_RETRY = True
+
+def set_auto_retry(new_boolean):
+    global AUTO_RETRY
+    AUTO_RETRY = new_boolean
 
 # Runs queries
 def run_query(query, variables, header):
@@ -10,7 +14,7 @@ def run_query(query, variables, header):
     def _run_query(query, variables, header, seconds): 
         json_request = {'query': query, 'variables': variables}
         try:
-            request = requests.post(url=URL, json=json_request, headers=header)
+            request = requests.post(url='https://api.smash.gg/gql/alpha', json=json_request, headers=header)
             if request.status_code == 400:
                 raise RequestError
             elif request.status_code == 429:
@@ -19,7 +23,7 @@ def run_query(query, variables, header):
                 raise ResponseError
             elif 500 <= request.status_code < 600:
                 raise ServerError
-            else:
+            elif 300 <= request.status_code < 400:
                 raise NoIdeaError
 
             response = request.json()
@@ -29,9 +33,13 @@ def run_query(query, variables, header):
             print("Error 400: Bad request (probably means your key is wrong)")
             return
         except TooManyRequestsError:
-            print("Error 429: Sending too many requests right now, trying again in {} seconds".format(seconds))
-            time.sleep(seconds)
-            return _run_query(query, variables, header, seconds*2)
+            if AUTO_RETRY:
+                print("Error 429: Sending too many requests right now, trying again in {} seconds".format(seconds))
+                time.sleep(seconds)
+                return _run_query(query, variables, header, seconds*2)
+            else:
+                print("Error 429: Sending too many requests right now")
+                return
         except ResponseError:
             print("Error {}: Unknown request error".format(request.status_code))
             return
@@ -42,4 +50,4 @@ def run_query(query, variables, header):
             print("Error {}: I literally have no idea how you got this status code, please send this to me".format(request.status_code))
             return
 
-    return _run_query(query, variables, header, 5)
+    return _run_query(query, variables, header, 10)
