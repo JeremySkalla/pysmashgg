@@ -36,7 +36,8 @@ However, I would like to say I think the best thing to do with this project if y
 import SmashGGPy
 
 # Initialize the SmashGGPy class
-smash = pysmashgg.SmashGG('KEY')
+# The second variable is auto retry, for requests: You can enable it or disable it :)
+smash = pysmashgg.SmashGG('KEY', True)
 
 # Show event_id for an event, this is for use in the 'event' commands
 event = smash.tournament_show_event_id('smash-summit-10-online', 'melee-singles')
@@ -169,7 +170,7 @@ print(player_info)
 # this does not include tournaments that players locally registered for
 # and aren't connected to their smash.gg account
 # USE THE LINK IN API DOCUMENATION TO DETERMINE THE VIDEOGAME_ID, THE SECOND ARG
-player_tournaments = smash.player_show_tournaments(1000, 1, 1)
+player_tournaments = smash.player_show_tournaments(1000, 1)
 print(player_tournaments)
 
 # Show all tournaments that a player registered for a specific game in with their smash.gg account

@@ -20,7 +20,7 @@ ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
 
 SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
   event(id: $eventId) {
-    sets(page: $page, perPage: 25) {
+    sets(page: $page, perPage: 25, sortType: STANDARD) {
       nodes {
         id
         slots {
