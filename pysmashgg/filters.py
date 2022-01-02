@@ -126,10 +126,13 @@ def show_sets_filter(response):
 
     if response['data']['event']['sets']['nodes'] is None:
         return
-    
+        
     sets = [] # Need for return at the end
 
     for node in response['data']['event']['sets']['nodes']:
+        if (node['slots'][0]['entrant'] is None or node['slots'][1]['entrant'] is None):
+            continue # This fixes a bug when tournament ends early
+
         cur_set = {}
         cur_set['id'] = node['id']
         cur_set['entrant1Id'] = node['slots'][0]['entrant']['id']

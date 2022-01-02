@@ -1,4 +1,4 @@
-# **v1.0.2**
+# **v1.1.1**
 
 - Bug fixes with showing sets (Smashgg API is trash sometimes)
 - Added auto_retry function built into SmashGG object, for if you get denied for requesting too much you can auto-retry and it will increase the time it waits every time before a request
