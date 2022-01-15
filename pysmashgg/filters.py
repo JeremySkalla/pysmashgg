@@ -127,9 +127,12 @@ def show_sets_filter(response):
     if response['data']['event']['sets']['nodes'] is None:
         return
         
+    
     sets = [] # Need for return at the end
 
     for node in response['data']['event']['sets']['nodes']:
+        if len(node['slots']) == 1:
+            continue # This fixes a bug where player doesn't have an opponent
         if (node['slots'][0]['entrant'] is None or node['slots'][1]['entrant'] is None):
             continue # This fixes a bug when tournament ends early
 
@@ -139,6 +142,19 @@ def show_sets_filter(response):
         cur_set['entrant2Id'] = node['slots'][1]['entrant']['id']
         cur_set['entrant1Name'] = node['slots'][0]['entrant']['name']
         cur_set['entrant2Name'] = node['slots'][1]['entrant']['name']
+
+        if (node['games'] is not None):
+            entrant1_chars = []
+            entrant2_chars = []
+            game_winners_ids = []
+            for game in node['games']:
+                entrant1_chars.append(game['selections'][0]['selectionValue'])
+                entrant2_chars.append(game['selections'][1]['selectionValue'])
+                game_winners_ids.append(game['winnerId'])
+
+            cur_set['entrant1Chars'] = entrant1_chars
+            cur_set['entrant2Chars'] = entrant2_chars
+            cur_set['gameWinners'] = game_winners_ids
         
         # Next 2 if/else blocks make sure there's a result in, sometimes DQs are weird
         # there also could be ongoing matches
@@ -185,6 +201,7 @@ def show_sets_filter(response):
                 cur_player = {}
                 cur_player['playerId'] = user['player']['id']
                 cur_player['playerTag'] = user['player']['gamerTag']
+                cur_player['entrantId'] = user['entrants'][0]['id']
                 players.append(cur_player)
             
             cur_set['entrant' + str(j+1) + 'Players'] = players
@@ -405,7 +422,9 @@ def show_event_by_game_size_dated_filter(response, size, videogame_id):
 
     for node in response['data']['tournaments']['nodes']:
         for event in node['events']:
-            if event['videogame']['id'] == videogame_id and event['numEntrants'] >= size:
+            if (event['numEntrants'] is None or event['videogame']['id'] is None):
+                continue
+            elif event['videogame']['id'] == videogame_id and event['numEntrants'] >= size:
                 cur_event = {}
                 cur_event['tournamentName'] = node['name']
                 cur_event['tournamentSlug'] = node['slug'].split('/')[-1]

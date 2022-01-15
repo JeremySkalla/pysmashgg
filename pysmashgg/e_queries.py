@@ -20,8 +20,19 @@ ENTRANT_ID_QUERY = """query EventEntrants($eventId: ID!, $name: String!) {
 
 SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
   event(id: $eventId) {
-    sets(page: $page, perPage: 25, sortType: STANDARD) {
+    tournament {
+      id
+      name
+    }
+    name
+    sets(page: $page, perPage: 18, sortType: STANDARD) {
       nodes {
+        games {
+          winnerId
+          selections {
+            selectionValue
+          }
+        }
         id
         slots {
           standing {
@@ -37,9 +48,13 @@ SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
             id
             name
             participants {
+              entrants {
+                id
+              }
               player {
                 id
                 gamerTag
+                
               }
             }
           }
