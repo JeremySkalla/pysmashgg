@@ -31,6 +31,9 @@ SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
           winnerId
           selections {
             selectionValue
+            entrant {
+              id
+            }
           }
         }
         id

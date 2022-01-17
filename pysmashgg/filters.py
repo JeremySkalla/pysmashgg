@@ -148,8 +148,13 @@ def show_sets_filter(response):
             entrant2_chars = []
             game_winners_ids = []
             for game in node['games']:
-                entrant1_chars.append(game['selections'][0]['selectionValue'])
-                entrant2_chars.append(game['selections'][1]['selectionValue'])
+                if (node['slots'][0]['entrant']['id'] == game['selections'][0]['entrant']['id']):
+                    entrant1_chars.append(game['selections'][0]['selectionValue'])
+                    entrant2_chars.append(game['selections'][1]['selectionValue'])
+                else:
+                    entrant2_chars.append(game['selections'][0]['selectionValue'])
+                    entrant1_chars.append(game['selections'][1]['selectionValue'])
+                    
                 game_winners_ids.append(game['winnerId'])
 
             cur_set['entrant1Chars'] = entrant1_chars
