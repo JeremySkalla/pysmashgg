@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pysmashgg",
-    version="1.1.5",
+    version="1.1.5.7",
     author="Jeremy Skalla",
     author_email="jthroughs@gmail.com",
     description="Python Wrapper for smash.gg's GraphQL API",

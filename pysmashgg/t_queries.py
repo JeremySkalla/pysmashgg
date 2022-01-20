@@ -93,8 +93,23 @@ SHOW_EVENTS_QUERY = """query ($tourneySlug: String!) {
 
 SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
   event(id: $eventId) {
-    sets(page: $page, perPage: 25, sortType: STANDARD) {
+    tournament {
+      id
+      name
+    }
+    name
+    sets(page: $page, perPage: 18, sortType: STANDARD) {
       nodes {
+        fullRoundText
+        games {
+          winnerId
+          selections {
+            selectionValue
+            entrant {
+              id
+            }
+          }
+        }
         id
         slots {
           standing {
@@ -110,9 +125,13 @@ SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
             id
             name
             participants {
+              entrants {
+                id
+              }
               player {
                 id
                 gamerTag
+                
               }
             }
           }

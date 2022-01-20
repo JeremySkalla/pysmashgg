@@ -27,6 +27,7 @@ SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
     name
     sets(page: $page, perPage: 18, sortType: STANDARD) {
       nodes {
+        fullRoundText
         games {
           winnerId
           selections {
@@ -79,7 +80,7 @@ SHOW_ENTRANTS_QUERY = """query EventStandings($eventId: ID!, $page: Int!) {
     id
     name
     standings(query: {
-      perPage: 25,
+      perPage: 24,
       page: $page}){
       nodes {
         placement

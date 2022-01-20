@@ -131,7 +131,7 @@ def show_sets_filter(response):
     sets = [] # Need for return at the end
 
     for node in response['data']['event']['sets']['nodes']:
-        if len(node['slots']) == 1:
+        if len(node['slots']) < 2:
             continue # This fixes a bug where player doesn't have an opponent
         if (node['slots'][0]['entrant'] is None or node['slots'][1]['entrant'] is None):
             continue # This fixes a bug when tournament ends early
@@ -148,12 +148,16 @@ def show_sets_filter(response):
             entrant2_chars = []
             game_winners_ids = []
             for game in node['games']:
-                if (node['slots'][0]['entrant']['id'] == game['selections'][0]['entrant']['id']):
+                if (game['selections'] is None): # This fixes an issue with selections being none while games are reported
+                    continue
+                elif (node['slots'][0]['entrant']['id'] == game['selections'][0]['entrant']['id']):
                     entrant1_chars.append(game['selections'][0]['selectionValue'])
-                    entrant2_chars.append(game['selections'][1]['selectionValue'])
+                    if len(game['selections']) > 1:
+                        entrant2_chars.append(game['selections'][1]['selectionValue'])
                 else:
                     entrant2_chars.append(game['selections'][0]['selectionValue'])
-                    entrant1_chars.append(game['selections'][1]['selectionValue'])
+                    if len(game['selections']) > 1:
+                        entrant1_chars.append(game['selections'][1]['selectionValue'])
                     
                 game_winners_ids.append(game['winnerId'])
 
@@ -195,6 +199,8 @@ def show_sets_filter(response):
                 cur_set['loserName'] = cur_set['entrant1Name']
         else:
             cur_set['completed'] = False
+
+        cur_set['fullRoundText'] = node['fullRoundText']
 
         cur_set['bracketName'] = node['phaseGroup']['phase']['name']
         cur_set['bracketId'] = node['phaseGroup']['id']
@@ -681,15 +687,22 @@ def bracket_show_sets_filter(response):
 def player_show_info_filter(response):
     if response['data']['player'] is None:
         return
+    if response['data']['player']['user'] is None:
+        return
 
     player = {}
-
     player['tag'] = response['data']['player']['gamerTag']
     player['name'] = response['data']['player']['user']['name']
     player['bio'] = response['data']['player']['user']['name']
-    player['country'] = response['data']['player']['user']['location']['country']
-    player['state'] = response['data']['player']['user']['location']['state']
-    player['city'] = response['data']['player']['user']['location']['city']
+    if response['data']['player']['user']['location'] is not None:
+        player['country'] = response['data']['player']['user']['location']['country']
+        player['state'] = response['data']['player']['user']['location']['state']
+        player['city'] = response['data']['player']['user']['location']['city']
+    else:
+        player['country'] = None
+        player['state'] = None
+        player['city'] = None
+        
     player['rankings'] = response['data']['player']['rankings']
 
     return player
