@@ -121,6 +121,8 @@ def show_events_filter(response):
 
 # Filter for the show_sets function
 def show_sets_filter(response):
+    if 'data' not in response:
+        return
     if response['data']['event'] is None:
         return
 
@@ -202,18 +204,30 @@ def show_sets_filter(response):
 
         cur_set['fullRoundText'] = node['fullRoundText']
 
-        cur_set['bracketName'] = node['phaseGroup']['phase']['name']
-        cur_set['bracketId'] = node['phaseGroup']['id']
+        if node['phaseGroup'] is not None:
+            cur_set['bracketName'] = node['phaseGroup']['phase']['name']
+            cur_set['bracketId'] = node['phaseGroup']['id']
+        else:
+            cur_set['bracketName'] = None
+            cur_set['bracketId'] = None
 
         # This gives player_ids, but it also is made to work with team events
         for j in range(0, 2):
             players = []
             for user in node['slots'][j]['entrant']['participants']:
                 cur_player = {}
-                cur_player['playerId'] = user['player']['id']
-                cur_player['playerTag'] = user['player']['gamerTag']
-                cur_player['entrantId'] = user['entrants'][0]['id']
-                players.append(cur_player)
+                if user['player'] is not None:
+                    cur_player['playerId'] = user['player']['id']
+                    cur_player['playerTag'] = user['player']['gamerTag']
+                    if user['entrants'] is not None:
+                        cur_player['entrantId'] = user['entrants'][0]['id']
+                    else:
+                        cur_player['entrantId'] = node['slots'][j]['entrant']['id']
+                    players.append(cur_player)
+                else:
+                    cur_player['playerId'] = None
+                    cur_player['playerTag'] = None
+                    cur_player['entrantId'] = node['slots'][j]['entrant']['id']
             
             cur_set['entrant' + str(j+1) + 'Players'] = players
 

@@ -1,8 +1,8 @@
-# **v 1.1 thru v1.1.5.7**
+# **v1.1 thru v1.1.6**
 
 - Added game results (and then fixed a bug with them)
 - Added more fields for event_show_sets
-- Bug fixes for like 15 different functions (Smashgg API is trash sometimes, I literally had to add a sort for like 1/10th of the events to even work)
+- Bug fixes for like 20 different functions (Smashgg API is trash sometimes, I literally had to add a sort for like 1/10th of the events to even work)
 - Added auto_retry function built into SmashGG object, for if you get denied for requesting too much you can auto-retry and it will increase the time it waits every time before a request
 - Added character data to event_show_sets, functionality to others will be added later
 - (THERE ARE PROBABLY MORE BUGS PLS LET ME KNOW IF YOU FIND ANY)
