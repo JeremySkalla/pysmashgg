@@ -455,6 +455,7 @@ def show_event_by_game_size_dated_filter(response, size, videogame_id):
                 cur_event['tournamentSlug'] = node['slug'].split('/')[-1]
                 cur_event['tournamentId'] = node['id']
                 cur_event['online'] = node['isOnline']
+                cur_event['startAt'] = node['startAt']
                 cur_event['endAt'] = node['endAt']
                 cur_event['eventName'] = event['name']
                 cur_event['eventId'] = event['id']
@@ -562,11 +563,6 @@ def show_by_radius_filter(response):
         cur_tournament['city'] = node['city']
         cur_tournament['startTimestamp'] = node['startAt']
         cur_tournament['endTimestamp'] = node['endAt']
-        # IMPLEMENT THIS ONCE I ACTUALLY UNDERSTAND HOW STATE WORKS
-        # if node['state'] == 3:
-        #     cur_tournament['completed'] = True
-        # else:
-        #     cur_tournament['completed'] = False
 
         tournaments.append(cur_tournament)
 
@@ -594,6 +590,31 @@ def show_players_by_sponsor_filter(response):
         players.append(cur_player)
 
     return players
+
+def show_by_owner_filter(response):
+    if response['data']['tournaments'] is None:
+        return
+
+    if response['data']['tournaments']['nodes'] is None:
+        return
+
+    tournaments = []
+
+    for node in response['data']['tournaments']['nodes']:
+        cur_tournament = {}
+        cur_tournament['id'] = node['id']
+        cur_tournament['name'] = node['name']
+        cur_tournament['slug'] = node['slug'].split('/')[-1]
+        cur_tournament['entrants'] = node['numAttendees']
+        cur_tournament['country'] = node['countryCode']
+        cur_tournament['state'] = node['addrState']
+        cur_tournament['city'] = node['city']
+        cur_tournament['startTimestamp'] = node['startAt']
+        cur_tournament['endTimestamp'] = node['endAt']
+
+        tournaments.append(cur_tournament)
+
+    return tournaments
 
 # BRACKETS.PY
 

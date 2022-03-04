@@ -1,3 +1,9 @@
+# **v1.2**
+
+- I figured I've been doing so many minor updates we'll call this a new version
+- Added `tournament_show_by_owner(owner, page_num)`
+- Added `startAt` to `tournament_show_event_by_game_size_dated`
+
 # **v1.1 thru v1.1.6**
 
 - Added game results (and then fixed a bug with them)

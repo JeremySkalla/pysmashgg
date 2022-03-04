@@ -123,6 +123,10 @@ print(tournaments_by_radius)
 # Shows players at tournaments from a certain sponsor/prefix
 players_by_sponsor = smash.tournament_show_players_by_sponsor('genesis-7', 'C9')
 print(players_by_sponsor)
+
+# Shows tournaments by owner
+tournaments_by_owner = smash.tournament_show_by_owner(161429, 1)
+print(tournaments_by_owner)
 ```
 
 ## **Event Usage**

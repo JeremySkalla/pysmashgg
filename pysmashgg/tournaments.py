@@ -145,3 +145,9 @@ def show_players_by_sponsor(tournament_name, sponsor, header, auto_retry):
     response = run_query(SHOW_PLAYERS_BY_SPONSOR, variables, header, auto_retry)
     data = filters.show_players_by_sponsor_filter(response)
     return data
+
+def show_by_owner(owner, page_num, header, auto_retry):
+    variables = {"ownerId": owner, "page": page_num}
+    response = run_query(SHOW_BY_OWNER_QUERY, variables, header, auto_retry)
+    data = filters.show_by_owner_filter(response)
+    return data

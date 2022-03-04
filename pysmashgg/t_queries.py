@@ -238,6 +238,7 @@ SHOW_EVENT_BY_GAME_SIZE_DATED_QUERY = """query TournamentsByVideogame($page: Int
       id
       slug
       isOnline
+      startAt
       endAt
       events {
         name
@@ -366,3 +367,25 @@ SHOW_PLAYERS_BY_SPONSOR = """query ($slug:String!, $sponsor: String!) {
     }
   }
 }"""
+
+SHOW_BY_OWNER_QUERY = """query TournamentsByOwner($ownerId: ID!, $page: Int!) {
+    tournaments(query: {
+      perPage: 25,
+      page: $page,
+      filter: { ownerId: $ownerId }
+    }) {
+    nodes {
+      id
+      name
+      slug
+	  numAttendees
+      countryCode
+      addrState
+      city
+      startAt
+      endAt
+      state
+    }
+  }
+}
+"""

@@ -91,6 +91,10 @@ class SmashGG(object):
     # Players from a tournament with a certain sponsor
     def tournament_show_players_by_sponsor(self, tournament_name, sponsor):
         return tournaments.show_players_by_sponsor(tournament_name, sponsor, self.header, self.auto_retry)
+    
+    # Tournaments by owner id
+    def tournament_show_by_owner(self, owner, page_num):
+        return tournaments.show_by_owner(owner, page_num, self.header, self.auto_retry)
 
     # All entrants in a bracket (phaseGroup) at a tournament
     def bracket_show_entrants(self, bracket_id, page_num):
