@@ -437,6 +437,9 @@ def show_head_to_head_filter(response, player2_name):
 
 # Filter for the show_event_by_game_size_dated function
 def show_event_by_game_size_dated_filter(response, size, videogame_id):
+    if response['data'] is None:
+        return
+
     if response['data']['tournaments'] is None:
         return
 
