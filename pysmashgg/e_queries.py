@@ -25,7 +25,7 @@ SHOW_SETS_QUERY = """query EventSets($eventId: ID!, $page: Int!) {
       name
     }
     name
-    sets(page: $page, perPage: 18, sortType: STANDARD) {
+    sets(page: $page, perPage: 18, sortType: RECENT) {
       nodes {
         fullRoundText
         games {
